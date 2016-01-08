@@ -11,7 +11,7 @@
 from setuptools import setup
 
 try:
-    readme = open('README.md').read()
+    readme = open('README.rst').read()
 except:
     readme = ''
 

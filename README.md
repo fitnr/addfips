@@ -6,7 +6,7 @@ FIPS codes are the official ID numbers of places in the US. They're invaluable f
 
 Say you have a CSV file like this:
 
-```csv
+```
 state,county,statistic
 IL,Cook,123
 California,Los Angeles County,321
@@ -26,7 +26,7 @@ countyfp,state,county,statistic
 02270,Alaska,Kusilvak,12
 ```
 
-## Install
+## Installing
 
 Add FIPS is a Python package.
 
