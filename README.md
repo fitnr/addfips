@@ -102,6 +102,13 @@ Use field index for a file with no header row:
 addfips data_no_header.csv --no-header-row -s 1 > data_no_header_fips.csv
 ```
 
+Add FIPS for counties from a specific state. These are equivalent:
+```
+addfips ny_data.csv --state-name NY -c county > ny_data_fips.csv
+addfips ny_data.csv --state-name 'New York' -c county > ny_data_fips.csv
+addfips ny_data.csv --state-name 36 -c county > ny_data_fips.csv
+```
+
 Use an alternate delimiter:
 ```
 addfips pipe_delimited.dsv -d'|' -s state > result.csv
@@ -134,6 +141,8 @@ Add fips is available for use in your Python scripts:
 >>> af.add_county_fips(row, county_field="county", state_field="state")
 {'county': 'Cook County', 'state': 'IL', 'fips': '17031'}
 ````
+
+The results of `AddFIPS.get_state_fips` and `AddFIPS.get_county_fips` are strings, since FIPS codes may have leading zeros.
 
 #### AddFIPS(vintage='current')
 
