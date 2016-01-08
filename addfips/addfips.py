@@ -112,7 +112,7 @@ class AddFIPS(object):
         if state:
             state_fips = self.get_state_fips(state)
         else:
-            state_fips = self.get_state_fips(row[state_field])
+            state_fips = self.get_state_fips(row[state_field or self.default_state_field])
 
         if county_field is None:
             county_field = self.default_county_field
