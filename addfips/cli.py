@@ -41,7 +41,7 @@ def main():
         kwargs["county_field"] = args.county_field
 
         if args.state_name:
-            kwargs["state_name"] = args.state_name
+            kwargs["state"] = args.state_name
     else:
         func = 'add_state_fips'
 

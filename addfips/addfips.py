@@ -68,28 +68,28 @@ class AddFIPS(object):
                              .replace(' Municipio', '')
                              .replace(' District', '')
                              .lower()
-                             )
+                            )
 
                 self.counties[statefp][bare_name] = row['countyfp']
 
-    def get_state_fips(self, state_name):
-        if state_name is None:
+    def get_state_fips(self, state):
+        '''Get FIPS code from a state name or postal code'''
+        if state is None:
             return None
 
-        return self.states.get(state_name.lower())
+        return self.states.get(state.lower())
 
-    def get_county_fips(self, county_name, state_name=None, state_fips=None):
+    def get_county_fips(self, county, state):
         '''
         Get a county's FIPS code.
-        :county_name str
-        :state_name str Name or postal abbreviation for a state
-        :state_fips str State FIPS code
+        :county str County name
+        :state str Name, postal abbreviation or FIPS code for a state
         '''
-        state_fips = state_fips or self.get_state_fips(state_name)
+        state_fips = self.get_state_fips(state)
         counties = self.counties.get(state_fips, {})
 
         try:
-            return state_fips + counties.get(county_name.lower())
+            return state_fips + counties.get(county.lower())
         except TypeError:
             return None
 
@@ -108,24 +108,24 @@ class AddFIPS(object):
             row.insert(0, fips)
         return row
 
-    def add_county_fips(self, row, county_field=None, state_field=None, state_name=None):
+    def add_county_fips(self, row, county_field=None, state_field=None, state=None):
         '''
         Add county FIPS to a dictionary containing a state name, FIPS code, or using a passed state name or FIPS code.
         :row dict/list A dictionary with state and county names
         :county_field str county name field. default: county
         :state_fips_field str state FIPS field containing state fips
         :state_field str state name field. default: county
-        :state_name str State name or FIPS code to use
+        :state str State name, postal abbreviation or FIPS code to use
         '''
-        if state_name:
-            state_fips = self.get_state_fips(state_name)
+        if state:
+            state_fips = self.get_state_fips(state)
         else:
             state_fips = self.get_state_fips(row[state_field])
 
         if county_field is None:
             county_field = self.default_county_field
 
-        fips = self.get_county_fips(row[county_field], state_fips=state_fips)
+        fips = self.get_county_fips(row[county_field], state_fips)
 
         try:
             row['fips'] = fips
