@@ -28,13 +28,18 @@ countyfp,state,county,statistic
 
 ## Installing
 
-Add FIPS is a Python package.
+Add FIPS is a Python package, compatible with Python 2.7, Python 3, and pypy. It has no dependencies outside of Python's standard libraries.
 
+If you've used Python packages before:
 ```
 pip install addfips
+# or
+pip install --user addfips
 ```
 
-Works in Python 2.7, 3, and pypy.
+If you haven't used Python packages before, [get pip](http://pip.readthedocs.org/en/stable/installing/), then come back.
+
+You can also clone the repo and install with `python setup.py install`.
 
 ## Features
 
@@ -130,19 +135,19 @@ Add fips is available for use in your Python scripts:
 {'county': 'Cook County', 'state': 'IL', 'fips': '17031'}
 ````
 
-### `AddFIPS(vintage='current')`
+#### AddFIPS(vintage='current')
 
-#### get_state_fips(self, state)
+__get_state_fips(self, state)__
 Returns two-digit FIPS code based on  a state name or postal code.
 
-#### get_county_fips(self, county, state)
+__get_county_fips(self, county, state)__
 Returns five-digit FIPS code based on county name and state name/abbreviation/FIPS.
 
-#### add_state_fips(self, row, state_field=None)
+__add_state_fips(self, row, state_field='state')__
 Returns the input row with a two-figit state FIPS code added.
 Input row may be either a `dict` or a `list`. If a `dict`, the 'fips' key is added. If a `list`, the FIPS code is added at the start of the list.
 
-#### add_county_fips(self, row, county_field=None, state_field=None, state=None)
+__add_county_fips(self, row, county_field='county', state_field='state', state=None)__
 Returns the input row with a five-figit county FIPS code added.
 Input row may be either a `dict` or a `list`. If a `dict`, the 'fips' key is added. If a `list`, the FIPS code is added at the start of the list.
 
