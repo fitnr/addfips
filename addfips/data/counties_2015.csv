@@ -57,6 +57,7 @@ statefp,countyfp,name
 01,111,Randolph County
 01,113,Russell County
 01,115,St. Clair County
+01,115,Saint Clair County
 01,117,Shelby County
 01,119,Sumter County
 01,121,Talladega County
@@ -174,6 +175,7 @@ statefp,countyfp,name
 05,119,Pulaski County
 05,121,Randolph County
 05,123,St. Francis County
+05,123,Saint Francis County
 05,125,Saline County
 05,127,Scott County
 05,129,Searcy County
@@ -377,7 +379,9 @@ statefp,countyfp,name
 12,105,Polk County
 12,107,Putnam County
 12,109,St. Johns County
+12,109,Saint Johns County
 12,111,St. Lucie County
+12,111,Saint Lucie County
 12,113,Santa Rosa County
 12,115,Sarasota County
 12,117,Seminole County
@@ -679,6 +683,7 @@ statefp,countyfp,name
 17,159,Richland County
 17,161,Rock Island County
 17,163,St. Clair County
+17,163,Saint Clair County
 17,165,Saline County
 17,167,Sangamon County
 17,169,Schuyler County
@@ -770,6 +775,7 @@ statefp,countyfp,name
 18,137,Ripley County
 18,139,Rush County
 18,141,St. Joseph County
+18,141,Saint Joseph County
 18,143,Scott County
 18,145,Shelby County
 18,147,Spencer County
@@ -1159,14 +1165,23 @@ statefp,countyfp,name
 22,083,Richland Parish
 22,085,Sabine Parish
 22,087,St. Bernard Parish
+22,087,Saint Bernard Parish
 22,089,St. Charles Parish
+22,089,Saint Charles Parish
 22,091,St. Helena Parish
+22,091,Saint Helena Parish
 22,093,St. James Parish
+22,093,Saint James Parish
 22,095,St. John the Baptist Parish
+22,095,Saint John the Baptist Parish
 22,097,St. Landry Parish
+22,097,Saint Landry Parish
 22,099,St. Martin Parish
+22,099,Saint Martin Parish
 22,101,St. Mary Parish
+22,101,Saint Mary Parish
 22,103,St. Tammany Parish
+22,103,Saint Tammany Parish
 22,105,Tangipahoa Parish
 22,107,Tensas Parish
 22,109,Terrebonne Parish
@@ -1213,6 +1228,7 @@ statefp,countyfp,name
 24,033,Prince George's County
 24,035,Queen Anne's County
 24,037,St. Mary's County
+24,037,Saint Mary's County
 24,039,Somerset County
 24,041,Talbot County
 24,043,Washington County
@@ -1307,7 +1323,9 @@ statefp,countyfp,name
 26,143,Roscommon County
 26,145,Saginaw County
 26,147,St. Clair County
+26,147,Saint Clair County
 26,149,St. Joseph County
+26,149,Saint Joseph County
 26,151,Sanilac County
 26,153,Schoolcraft County
 26,155,Shiawassee County
@@ -1385,6 +1403,7 @@ statefp,countyfp,name
 27,133,Rock County
 27,135,Roseau County
 27,137,St. Louis County
+27,137,Saint Louis County
 27,139,Scott County
 27,141,Sherburne County
 27,143,Sibley County
@@ -1577,10 +1596,14 @@ statefp,countyfp,name
 29,179,Reynolds County
 29,181,Ripley County
 29,183,St. Charles County
+29,183,Saint Charles County
 29,185,St. Clair County
+29,185,Saint Clair County
 29,186,Ste. Genevieve County
 29,187,St. Francois County
+29,187,Saint Francois County
 29,189,St. Louis County
+29,189,Saint Louis County
 29,195,Saline County
 29,197,Schuyler County
 29,199,Scotland County
@@ -1600,6 +1623,7 @@ statefp,countyfp,name
 29,227,Worth County
 29,229,Wright County
 29,510,St. Louis city
+29,510,Saint Louis city
 30,001,Beaverhead County
 30,003,Big Horn County
 30,005,Blaine County
@@ -1880,6 +1904,7 @@ statefp,countyfp,name
 36,085,Richmond County
 36,087,Rockland County
 36,089,St. Lawrence County
+36,089,Saint Lawrence County
 36,091,Saratoga County
 36,093,Schenectady County
 36,095,Schoharie County
@@ -3112,6 +3137,7 @@ statefp,countyfp,name
 55,105,Rock County
 55,107,Rusk County
 55,109,St. Croix County
+55,109,Saint Croix County
 55,111,Sauk County
 55,113,Sawyer County
 55,115,Shawano County
@@ -3254,5 +3280,8 @@ statefp,countyfp,name
 72,153,Yauco Municipio
 74,300,Midway Islands
 78,010,St. Croix Island
+78,010,Saint Croix Island
 78,020,St. John Island
+78,020,Saint John Island
 78,030,St. Thomas Island
+78,030,Saint Thomas Island
