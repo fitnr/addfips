@@ -18,6 +18,7 @@ class testbase(unittest.TestCase):
         self.af = AddFIPS()
         self.row = {
             'county': 'Kings',
+            'borough': 'Brooklyn',
             'state': 'New York',
             'statefp': '36',
             'foo': 'bar'
@@ -48,7 +49,9 @@ class testbase(unittest.TestCase):
 
         new = self.af.add_county_fips(self.row, county_field='county', state_field='statefp')
         assert new['fips'] == '36047'
-        assert new['foo'] == 'bar'
+
+        new = self.af.add_county_fips(self.row, county_field='borough', state_field='statefp')
+        assert new['fips'] == '36047'
 
     def testCountyRowStateName(self):
         new = self.af.add_county_fips(self.row, county_field='county', state_name='New York')
@@ -62,7 +65,6 @@ class testbase(unittest.TestCase):
 
         new = self.af.add_state_fips(self.row, state_field='statefp')
         assert new['fips'] == '36'
-        assert new['foo'] == 'bar'
 
 
 if __name__ == '__main__':

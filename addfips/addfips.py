@@ -4,7 +4,6 @@
 # Licensed under the GPL-v3.0 license:
 # http://opensource.org/licenses/GPL-3.0
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-from __future__ import print_function
 import csv
 from pkg_resources import resource_stream
 
@@ -72,6 +71,9 @@ class AddFIPS(object):
                 self.counties[statefp][bare_name] = row['countyfp']
 
     def get_state_fips(self, state_name):
+        if state_name is None:
+            return None
+
         return self.states.get(state_name.lower())
 
     def get_county_fips(self, county_name, state_name=None, state_fips=None):
@@ -81,28 +83,34 @@ class AddFIPS(object):
         :state_name str Name or postal abbreviation for a state
         :state_fips str State FIPS code
         '''
-        if state_name is None and state_fips is None:
-            raise KeyError("Need either state name or state FIPS")
-
         state_fips = state_fips or self.get_state_fips(state_name)
+
+        if state_fips is None:
+            return None
+
         counties = self.counties.get(state_fips)
 
-        return state_fips + counties[county_name.lower()]
+        return state_fips + counties.get(county_name.lower())
 
     def add_state_fips(self, row, state_field=None):
         '''
         Add state FIPS to a dictionary.
-        :row dict A dictionary with state and county names
+        :row dict/list A dictionary with state and county names
         :state_field str name of state name field. default: state
         '''
         state_field = state_field or self.default_state_field
-        row['fips'] = self.get_state_fips(row[state_field])
+        fips = self.get_state_fips(row[state_field])
+
+        try:
+            row['fips'] = fips
+        except TypeError:
+            row.insert(0, fips)
         return row
 
     def add_county_fips(self, row, county_field=None, state_field=None, state_name=None):
         '''
         Add county FIPS to a dictionary containing a state name, FIPS code, or using a passed state name or FIPS code.
-        :row dict A dictionary with state and county names
+        :row dict/list A dictionary with state and county names
         :county_field str county name field. default: county
         :state_fips_field str state FIPS field containing state fips
         :state_field str state name field. default: county
@@ -113,7 +121,14 @@ class AddFIPS(object):
         else:
             state_fips = self.get_state_fips(row[state_field])
 
-        county = row[county_field or self.default_county_field]
-        row['fips'] = self.get_county_fips(county, state_fips=state_fips)
+        if county_field is None:
+            county_field = self.default_county_field
+
+        fips = self.get_county_fips(row[county_field], state_fips=state_fips)
+
+        try:
+            row['fips'] = fips
+        except TypeError:
+            row.insert(0, fips)
 
         return row

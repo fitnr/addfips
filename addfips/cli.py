@@ -12,39 +12,12 @@ from signal import signal, SIGPIPE, SIG_DFL
 from . import __version__ as version
 from .addfips import AddFIPS
 
-
-def positional_fieldnames(args):
-    try:
-        cf = int(args.county_field)
-    except TypeError:
-        cf = 0
-    try:
-        sf = int(args.state_field)
-    except TypeError:
-        sf = 0
-    try:
-        ff = int(args.state_fips_field)
-    except TypeError:
-        ff = 0
-
-    fieldnames = range(0, max(cf, sf, ff))
-
-    if cf:
-        fieldnames[cf] = 'county'
-    if sf:
-        fieldnames[sf] = 'state'
-    if ff:
-        fieldnames[sf] = 'state_fips_field'
-
-    return fieldnames
-
-
 def main():
     parser = argparse.ArgumentParser(description="Add FIPS codes to a CSV with state and/or county names")
 
     parser.add_argument('-V', '--version', action='version', version='%(prog)s ' + version)
 
-    parser.add_argument('INPUT', nargs='?', help='Input file. default: stdin', default='/dev/stdin')
+    parser.add_argument('input', nargs='?', help='Input file. default: stdin', default='/dev/stdin')
     parser.add_argument('-d', '--delimiter', metavar='CHAR', type=str, default=',', help='field delimiter default: ,', )
 
     group = parser.add_mutually_exclusive_group(required=True)
@@ -59,43 +32,43 @@ def main():
     args = parser.parse_args()
     af = AddFIPS(args.vintage)
 
-    if args.header:
-        fieldnames = None
-    else:
-        fieldnames = positional_fieldnames(args)
-        args.state_fips_field = 'state_fips_field'
-
     kwargs = {
-        "county_field": args.county_field,
-        "state_fips_field": args.state_fips_field,
         "state_field": args.state_field
     }
 
-    if args.county_field and args.state_name:
-        kwargs["state_name"] = args.state_name
+    if args.county_field:
+        func = 'add_county_fips'
+        kwargs["county_field"] = args.county_field
+
+        if args.state_name:
+            kwargs["state_name"] = args.state_name
+    else:
+        func = 'add_state_fips'
 
     with open(args.input) as f:
-        reader = csv.DictReader(f, fieldnames=fieldnames)
         signal(SIGPIPE, SIG_DFL)
 
-        fields = ['fips'] + reader.fieldnames
+        if args.header:
+            # Read the header, write a header.
+            reader = csv.DictReader(f, delimiter=args.delimiter)
+            fields = ['fips'] + reader.fieldnames
+            writer = csv.DictWriter(sys.stdout, fields)
+            writer.writeheader()
 
-        writer = csv.DictWriter(sys.stdout, fields)
-        writer.writeheader()
+        else:
+            # Ignore the header, don't write a header.
+            kwargs['state_field'] = int(kwargs['state_field']) - 1
+
+            if 'county_field' in kwargs:
+                kwargs['county_field'] = int(kwargs.get('county_field')) - 1
+
+            reader = csv.reader(f)
+            writer = csv.writer(sys.stdout)
 
         for row in reader:
-            try:
-                if args.county_field:
-                    new = af.add_county_fips(row, **kwargs)
-                else:
-                    new = af.add_state_fips(row, **kwargs)
-
-            except KeyError:
-                new = row
-                new['fips'] = None
+            new = getattr(af, func)(row, **kwargs)
 
             writer.writerow(new)
-
 
 if __name__ == '__main__':
     main()
