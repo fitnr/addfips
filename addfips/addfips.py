@@ -84,13 +84,12 @@ class AddFIPS(object):
         :state_fips str State FIPS code
         '''
         state_fips = state_fips or self.get_state_fips(state_name)
+        counties = self.counties.get(state_fips, {})
 
-        if state_fips is None:
+        try:
+            return state_fips + counties.get(county_name.lower())
+        except TypeError:
             return None
-
-        counties = self.counties.get(state_fips)
-
-        return state_fips + counties.get(county_name.lower())
 
     def add_state_fips(self, row, state_field=None):
         '''

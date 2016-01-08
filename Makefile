@@ -5,10 +5,13 @@
 # http://opensource.org/licenses/GPL-3.0
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 
-# show coverage in html format
-cov:
-	coverage run --include addfips/* setup.py test
+.PHONY: test cov
+
+cov: | test
 	coverage html
+
+test:
+	coverage run --include=addfips/* setup.py test
 
 deploy: README.rst
 	git push; git push --tags
