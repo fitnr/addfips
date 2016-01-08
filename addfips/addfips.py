@@ -5,7 +5,7 @@
 # http://opensource.org/licenses/GPL-3.0
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 import csv
-from pkg_resources import resource_stream
+from pkg_resources import resource_filename
 
 '''
 Add county FIPS code to a CSV that has state and county names.
@@ -31,15 +31,17 @@ class AddFIPS(object):
             vintage = 'current'
 
         # load state data
-        with resource_stream('addfips', STATES) as f:
+        states_file = resource_filename('addfips', STATES)
+        with open(states_file, 'rt') as f:
             s = list(csv.DictReader(f))
             postals = dict((row['postal'].lower(), row['fips']) for row in s)
             names = dict((row['name'].lower(), row['fips']) for row in s)
             fips = dict((row['fips'], row['fips']) for row in s)
-            self.states = dict(postals.items() + names.items() + fips.items())
+            self.states = dict(list(postals.items()) + list(names.items()) + list(fips.items()))
 
         # load county data
-        with resource_stream('addfips', COUNTY_FILES[vintage]) as f:
+        cofile = resource_filename('addfips', COUNTY_FILES[vintage])
+        with open(cofile, 'rt') as f:
             self.counties = dict()
 
             for row in csv.DictReader(f):
@@ -66,7 +68,7 @@ class AddFIPS(object):
                              .replace(' Municipio', '')
                              .replace(' District', '')
                              .lower()
-                            )
+                             )
 
                 self.counties[statefp][bare_name] = row['countyfp']
 

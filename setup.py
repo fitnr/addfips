@@ -47,5 +47,6 @@ setup(
             'addfips=addfips.cli:main',
         ],
     },
+    zip_safe=False,
     test_suite='tests'
 )
