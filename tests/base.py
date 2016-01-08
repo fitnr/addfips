@@ -26,8 +26,8 @@ class testbase(unittest.TestCase):
         self.list = ['Kings', 'Brooklyn', 'New York', 'NY', '36']
 
     def testBasics(self):
-        assert isinstance(self.af.states, dict)
-        assert isinstance(self.af.counties, dict)
+        assert isinstance(self.af._states, dict)
+        assert isinstance(self.af._counties, dict)
 
     def testGetState(self):
         assert self.af.get_state_fips('New York') == '36'

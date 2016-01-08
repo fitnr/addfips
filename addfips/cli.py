@@ -36,6 +36,7 @@ def main():
         "state_field": args.state_field
     }
 
+    # Check if we're decoding counties or states.
     if args.county_field:
         func = af.add_county_fips
         kwargs["county_field"] = args.county_field

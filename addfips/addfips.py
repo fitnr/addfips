@@ -22,7 +22,7 @@ STATES = 'data/states.csv'
 
 class AddFIPS(object):
 
-    """Get a county (and state) FIPS codes."""
+    """Get state or county FIPS codes"""
 
     default_county_field = 'county'
     default_state_field = 'state'
@@ -32,44 +32,45 @@ class AddFIPS(object):
             vintage = 'current'
 
         # load state data
-        states_file = resource_filename('addfips', STATES)
-        with open(states_file, 'rt') as f:
+        state_csv = resource_filename('addfips', STATES)
+        with open(state_csv, 'rt') as f:
             s = list(csv.DictReader(f))
             postals = dict((row['postal'].lower(), row['fips']) for row in s)
             names = dict((row['name'].lower(), row['fips']) for row in s)
             fips = dict((row['fips'], row['fips']) for row in s)
-            self.states = dict(list(postals.items()) + list(names.items()) + list(fips.items()))
+            self._states = dict(list(postals.items()) + list(names.items()) + list(fips.items()))
 
         # load county data
         county_pattern = r' (County|city|City|City and Borough|Borough|Census Area|Municipio|District|Parish)$'
-        cofile = resource_filename('addfips', COUNTY_FILES[vintage])
-        with open(cofile, 'rt') as f:
-            self.counties = dict()
+        county_csv = resource_filename('addfips', COUNTY_FILES[vintage])
+        with open(county_csv, 'rt') as f:
+            self._counties = dict()
 
             for row in csv.DictReader(f):
                 statefp = row['statefp']
 
-                if statefp not in self.counties:
-                    self.counties[statefp] = {}
+                if statefp not in self._counties:
+                    self._counties[statefp] = {}
 
                 name = row['name'].lower()
 
-                self.counties[statefp][name] = row['countyfp']
+                self._counties[statefp][name] = row['countyfp']
 
                 if "'" in name:
-                    self.counties[statefp][name.replace("'", "")] = row['countyfp']
+                    self._counties[statefp][name.replace("'", "")] = row['countyfp']
 
                 # Remove geography name and add to dict
                 bare_name = re.sub(county_pattern, '', row['name']).lower()
 
-                self.counties[statefp][bare_name] = row['countyfp']
+                self._counties[statefp][bare_name] = row['countyfp']
 
     def get_state_fips(self, state):
         '''Get FIPS code from a state name or postal code'''
         if state is None:
             return None
 
-        return self.states.get(state.lower())
+        # Check if we already have a FIPS code
+        return self._states.get(state.lower())
 
     def get_county_fips(self, county, state):
         '''
@@ -78,7 +79,7 @@ class AddFIPS(object):
         :state str Name, postal abbreviation or FIPS code for a state
         '''
         state_fips = self.get_state_fips(state)
-        counties = self.counties.get(state_fips, {})
+        counties = self._counties.get(state_fips, {})
 
         try:
             return state_fips + counties.get(county.lower())
