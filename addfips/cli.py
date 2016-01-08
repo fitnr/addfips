@@ -45,7 +45,7 @@ def main():
     else:
         func = 'add_state_fips'
 
-    with open(args.input) as f:
+    with open(args.input, 'rt') as f:
         signal(SIGPIPE, SIG_DFL)
 
         if args.header:
