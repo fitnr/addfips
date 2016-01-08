@@ -5,6 +5,7 @@
 # http://opensource.org/licenses/GPL-3.0
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 import csv
+import re
 from pkg_resources import resource_filename
 
 '''
@@ -40,6 +41,7 @@ class AddFIPS(object):
             self.states = dict(list(postals.items()) + list(names.items()) + list(fips.items()))
 
         # load county data
+        county_pattern = r' (County|city|City|City and Borough|Borough|Census Area|Municipio|District|Parish)$'
         cofile = resource_filename('addfips', COUNTY_FILES[vintage])
         with open(cofile, 'rt') as f:
             self.counties = dict()
@@ -58,17 +60,7 @@ class AddFIPS(object):
                     self.counties[statefp][name.replace("'", "")] = row['countyfp']
 
                 # Remove geography name and add to dict
-                bare_name = (row['name']
-                             .replace(' County', '')
-                             .replace(' City', '')
-                             .replace(' City and Borough', '')
-                             .replace(' Parish', '')
-                             .replace(' Census Area', '')
-                             .replace(' Borough', '')
-                             .replace(' Municipio', '')
-                             .replace(' District', '')
-                             .lower()
-                            )
+                bare_name = re.sub(county_pattern, '', row['name']).lower()
 
                 self.counties[statefp][bare_name] = row['countyfp']
 
