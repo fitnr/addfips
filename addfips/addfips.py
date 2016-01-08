@@ -38,6 +38,7 @@ class AddFIPS(object):
             postals = dict((row['postal'].lower(), row['fips']) for row in s)
             names = dict((row['name'].lower(), row['fips']) for row in s)
             fips = dict((row['fips'], row['fips']) for row in s)
+            self._state_fips = frozenset(fips)
             self._states = dict(list(postals.items()) + list(names.items()) + list(fips.items()))
 
         # load county data
@@ -70,6 +71,9 @@ class AddFIPS(object):
             return None
 
         # Check if we already have a FIPS code
+        if state in self._state_fips:
+            return state
+
         return self._states.get(state.lower())
 
     def get_county_fips(self, county, state):
