@@ -80,6 +80,40 @@ Options and flags:
 * `--vintage`: pass 2000 to use 2000 county names
 * `--no-header`: Indicates that the input file has no header. `--state-field` and `--county-field` are parsed as field indices.
 
+### Examples
+
+Add state FIPS codes:
+````
+addfips data.csv --state-field fieldName > data_with_fips.csv
+````
+
+Add state and county FIPS codes:
+````
+addfips data.csv --state-field fieldName --county-field countyName > data_with_fips.csv
+````
+
+Use field index for a file with no header row:
+```
+addfips data_no_header.csv --no-header-row -s 1 > data_no_header_fips.csv
+```
+
+Use an alternate delimiter:
+```
+addfips pipe_delimited.dsv -d'|' -s state > result.csv
+addfips semicolon_delimited.dsv -d';' -s state > result.csv
+```
+
+Pipe from other programs:
+````
+curl http://example.com/data.csv | addfips -s stateFieldName -c countyField > data_with_fips.csv
+csvkit -c state,county,important huge_file.csv | addfips -s state -c county > small_file.csv
+````
+
+Pipe to other programs. In files with extensive text, filtering with the FIPS code is safer than using county names, which may be common words (e.g. cook):
+````
+addfips culinary_data.csv -s stateFieldName -c countyField | grep -e "^17031" > culinary_data_cook_county.csv
+addfips -s StateName -c CountyName data.csv | csvsort -c fips > sorted_by_fips.csv
+````
 
 ## API
 
