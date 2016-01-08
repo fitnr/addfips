@@ -36,8 +36,8 @@ class testbase(unittest.TestCase):
         assert self.af.get_state_fips('new york') == '36'
 
     def testEmpty(self):
-        assert self.af.get_county_fips('foo') is None
-        assert self.af.get_county_fips('foo', state_name='New York') is None
+        assert self.af.get_county_fips('foo', 'bar') is None
+        assert self.af.get_county_fips('foo', state='New York') is None
 
     def testCountyRow(self):
         new = self.af.add_county_fips(self.row, county_field='county', state_field='state')
@@ -51,7 +51,7 @@ class testbase(unittest.TestCase):
         assert new['fips'] == '36047'
 
     def testCountyRowStateName(self):
-        new = self.af.add_county_fips(self.row, county_field='county', state_name='New York')
+        new = self.af.add_county_fips(self.row, county_field='county', state='New York')
         assert new['fips'] == '36047'
         assert new['foo'] == 'bar'
 

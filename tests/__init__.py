@@ -9,3 +9,4 @@
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 
 from . import base
+from . import test_cli
