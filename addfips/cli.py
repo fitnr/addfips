@@ -12,6 +12,15 @@ from signal import signal, SIGPIPE, SIG_DFL
 from . import __version__ as version
 from .addfips import AddFIPS
 
+def unmatched(result):
+    try:
+        if result['fips'] is None:
+            return True
+    except TypeError:
+        if result[0] is None:
+            return True
+
+    return False
 
 def main():
     parser = argparse.ArgumentParser(description="Add FIPS codes to a CSV with state and/or county names")
@@ -30,6 +39,8 @@ def main():
     parser.add_argument('-v', '--vintage', type=int, help='2000, 2010, or 2015. default: 2015')
     parser.add_argument('--no-header', action='store_false', dest='header',
                         help='Input has no header now, interpret fields as integers')
+    parser.add_argument('-u', '--err-unmatched', action='store_true', help='Print rows that addfips cannot match to stderr')
+
     parser.set_defaults(delimiter=',', input='/dev/stdin')
 
     args = parser.parse_args()
@@ -60,6 +71,9 @@ def main():
             writer = csv.DictWriter(sys.stdout, fields)
             writer.writeheader()
 
+            if args.err_unmatched:
+                error = csv.DictWriter(sys.stderr, fields)
+
         else:
             # Don't read a header, don't write a header.
             kwargs['state_field'] = int(kwargs['state_field']) - 1
@@ -70,7 +84,17 @@ def main():
             reader = csv.reader(f, delimiter=args.delimiter)
             writer = csv.writer(sys.stdout)
 
-        writer.writerows(func(row, **kwargs) for row in reader)
+            if args.err_unmatched:
+                error = csv.writer(sys.stderr)
+
+        # Write results, optionally to stderr
+        for row in reader:
+            result = func(row, **kwargs)
+
+            if args.err_unmatched and unmatched(result):
+                error.writerow(row)
+            else:
+                writer.writerow(result)
 
 if __name__ == '__main__':
     main()

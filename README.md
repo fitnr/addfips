@@ -76,6 +76,7 @@ optional arguments:
   -v VINTAGE, --vintage VINTAGE
                         2000, 2010, or 2015. default: 2015
   --no-header           Input has no header now, interpret fields as integers
+  -u, --err-unmatched   Print rows that addfips cannot match to stderr
 ````
 
 Options and flags:
@@ -86,6 +87,7 @@ Options and flags:
 * `--county-field`: Name of the field containing county name. If this is blank, the output will contain the two-character state FIPS code.
 * `--vintage`: Use earlier county names and FIPS codes. For instance, Clifton Forge city, VA, is not included in 2010 or later vintages.
 * `--no-header`: Indicates that the input file has no header. `--state-field` and `--county-field` are parsed as field indices.
+* `--err-unmatched`: Rows that `addfips` cannot match will be printed to stderr, rather than stdout
 
 The output is a CSV with a new column, "fips", appended to the front. When `addfips` cannot make a match, the fips column will have an empty value.
 
@@ -119,6 +121,12 @@ Use an alternate delimiter:
 ```
 addfips -d'|' -s state pipe_delimited.dsv > result.csv
 addfips -d';' -s state semicolon_delimited.dsv > result.csv
+```
+
+Print unmatched rows to another file:
+```
+addfips --err-unmatched -s state state_data.csv > state_data_fips.csv 2> state_unmatched.csv
+addfips -u -s STATE -c COUNTY county_data.csv > county_data_fips.csv 2> county_unmatched.csv
 ```
 
 Pipe from other programs:
