@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # This file is part of addfips.
 # http://github.com/fitnr/addfips
 
@@ -28,6 +29,21 @@ class AddFIPS(object):
     default_county_field = 'county'
     default_state_field = 'state'
 
+    diacretics = {
+        r"ñ": "n",
+        r"'": "",
+        r"ó": "o",
+        r"í": "i",
+        r"á": "a",
+        r"ü": "u",
+        r"é": "e",
+        r"î": "i",
+        r"è": "e",
+        r"à": "a",
+        r"ì": "i",
+        r"å": "a",
+    }
+
     def __init__(self, vintage=None):
         if vintage is None or vintage not in COUNTY_FILES:
             vintage = max(COUNTY_FILES.keys())
@@ -42,29 +58,36 @@ class AddFIPS(object):
             self._state_fips = frozenset(fips)
             self._states = dict(list(postals.items()) + list(names.items()) + list(fips.items()))
 
+        # Handle de-diacreticizing
+        self.diacretic_pattern = '(' + ('|'.join(self.diacretics)) + ')'
+        self.delete_diacretics = lambda x: self.diacretics[x.group()]
+
         # load county data
-        county_pattern = r' (County|city|City|City and Borough|Borough|Census Area|Municipio|District|Parish)$'
+        county_pattern = r' (county|city|city and borough|borough|census area|municipio|municipality|district|parish)$'
         county_csv = resource_filename('addfips', COUNTY_FILES[vintage])
         with open(county_csv, 'rt') as f:
             self._counties = dict()
 
             for row in csv.DictReader(f):
-                statefp = row['statefp']
+                if row['statefp'] not in self._counties:
+                    self._counties[row['statefp']] = {}
 
-                if statefp not in self._counties:
-                    self._counties[statefp] = {}
+                state = self._counties[row['statefp']]
 
-                name = row['name'].lower()
+                # Strip diacretics, remove geography name and add both to dict
+                county = self._delete_diacretics(row['name'].lower())
+                bare_county = re.sub(county_pattern, '', county)
+                state[county] = state[bare_county] = row['countyfp']
 
-                self._counties[statefp][name] = row['countyfp']
+                # Special rule for "St." places
+                if re.match(r'st\. ', county):
+                    saint = county.replace('st.', 'saint', 1)
+                    bare_saint = bare_county.replace('st.', 'saint', 1)
+                    state[saint] = state[bare_saint] = row['countyfp']
 
-                if "'" in name:
-                    self._counties[statefp][name.replace("'", "")] = row['countyfp']
 
-                # Remove geography name and add to dict
-                bare_name = re.sub(county_pattern, '', row['name']).lower()
-
-                self._counties[statefp][bare_name] = row['countyfp']
+    def _delete_diacretics(self, string):
+        return re.sub(self.diacretic_pattern, self.delete_diacretics, string)
 
     def get_state_fips(self, state):
         '''Get FIPS code from a state name or postal code'''
@@ -87,7 +110,8 @@ class AddFIPS(object):
         counties = self._counties.get(state_fips, {})
 
         try:
-            return state_fips + counties.get(county.lower())
+            name = self._delete_diacretics(county.lower())
+            return state_fips + counties.get(name)
         except TypeError:
             return None
 

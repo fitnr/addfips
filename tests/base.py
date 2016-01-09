@@ -9,13 +9,13 @@
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 
 import unittest
-from addfips import AddFIPS
+from addfips import addfips
 
 
 class testbase(unittest.TestCase):
 
     def setUp(self):
-        self.af = AddFIPS()
+        self.af = addfips.AddFIPS()
         self.row = {
             'county': 'Kings',
             'borough': 'Brooklyn',
@@ -64,14 +64,25 @@ class testbase(unittest.TestCase):
         assert self.af.get_county_fips('Añasco Municipio', 'Puerto Rico') == "72011"
 
     def testMunicipios(self):
-        assert self.af.get_county_fips('Anasco', 'PR') == "72011"
+        self.assertEqual(self.af.get_county_fips('Añasco Municipio', 'PR'), "72011")
+        self.assertEqual(self.af.get_county_fips('Añasco', 'PR'), "72011")
+
+    def testMunicipality(self):
+        self.assertEqual(self.af.get_county_fips('Anchorage Municipality', 'AK'), "02020")
+        self.assertEqual(self.af.get_county_fips('Anchorage', 'AK'), "02020")
+
+        assert self.af.get_county_fips('Northern Islands', '69') == "69085"
 
     def testCity(self):
         assert self.af.get_county_fips('Emporia', 'Virginia') == "51595"
 
     def testSaint(self):
-        assert self.af.get_county_fips('St. Louis', 'Missouri') == "29510"
-        assert self.af.get_county_fips('Saint Louis', 'MO') == "29510"
+        assert self.af.get_county_fips('St. Clair County', 'AL') == "01115"
+        assert self.af.get_county_fips('St. Clair', 'AL') == "01115"
+        assert self.af.get_county_fips('St. Louis City', 'Missouri') == "29510"
+        self.assertEqual(self.af.get_county_fips('Saint Louis County', 'Missouri'), "29189")
+        assert self.af.get_county_fips('Saint Louis County', 'MO') == "29189"
+        assert self.af.get_county_fips('Saint Louis City', 'MO') == "29510"
 
     def testDistrict(self):
         assert self.af.get_county_fips("Manu'a District", "60") == "60020"
@@ -124,6 +135,26 @@ class testbase(unittest.TestCase):
 
         new = self.af.add_state_fips(self.list, state_field=3)
         assert new[0] == '36'
+
+    def testVintages(self):
+        assert 2000 in addfips.COUNTY_FILES
+        assert 2010 in addfips.COUNTY_FILES
+        assert 2015 in addfips.COUNTY_FILES
+
+    def testVintage2015(self):
+        self.assertIsNone(self.af.get_county_fips('Clifton Forge', 'VA'))
+
+    def testVintage2010(self):
+        af2010 = addfips.AddFIPS(vintage=2010)
+        assert af2010.get_county_fips('Wade Hampton', 'Alaska') == '02270'
+        self.assertIsNone(af2010.get_county_fips('Clifton Forge', 'VA'))
+
+    def testVintage2000(self):
+        af2000 = addfips.AddFIPS(vintage=2000)
+        assert af2000.get_county_fips('Wade Hampton', 'Alaska') == '02270'
+        self.assertEqual(af2000.get_county_fips('Clifton Forge city', 'Virginia'), "51560")
+        assert af2000.get_county_fips('Clifton Forge', 'Virginia') == "51560"
+
 
 
 if __name__ == '__main__':

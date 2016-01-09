@@ -1799,7 +1799,6 @@ statefp,countyfp,name
 35,007,Colfax County
 35,009,Curry County
 35,011,De Baca County
-35,013,Dona Ana County
 35,013,Doña Ana County
 35,015,Eddy County
 35,017,Grant County
@@ -3148,6 +3147,7 @@ statefp,countyfp,name
 56,045,Weston County
 60,010,Eastern District
 60,020,Manu'a District
+60,020,Manua District
 60,030,Rose Island
 60,040,Swains Island
 60,050,Western District
@@ -3162,20 +3162,16 @@ statefp,countyfp,name
 72,007,Aguas Buenas Municipio
 72,009,Aibonito Municipio
 72,011,Añasco Municipio
-72,011,Anasco Municipio
 72,013,Arecibo Municipio
 72,015,Arroyo Municipio
 72,017,Barceloneta Municipio
 72,019,Barranquitas Municipio
 72,021,Bayamón Municipio
-72,021,Bayamon Municipio
 72,023,Cabo Rojo Municipio
 72,025,Caguas Municipio
 72,027,Camuy Municipio
 72,029,Canóvanas Municipio
-72,029,Canovanas Municipio
 72,031,Carolina Municipio
-72,033,Catano Municipio
 72,033,Cataño Municipio
 72,035,Cayey Municipio
 72,037,Ceiba Municipio
@@ -3183,14 +3179,12 @@ statefp,countyfp,name
 72,041,Cidra Municipio
 72,043,Coamo Municipio
 72,045,Comerío Municipio
-72,045,Comerio Municipio
 72,047,Corozal Municipio
 72,049,Culebra Municipio
 72,051,Dorado Municipio
 72,053,Fajardo Municipio
 72,054,Florida Municipio
 72,055,Guánica Municipio
-72,055,Guanica Municipio
 72,057,Guayama Municipio
 72,059,Guayanilla Municipio
 72,061,Guaynabo Municipio
@@ -3207,7 +3201,6 @@ statefp,countyfp,name
 72,083,Las Marías Municipio
 72,085,Las Piedras Municipio
 72,087,Loíza Municipio
-72,087,Loiza Municipio
 72,089,Luquillo Municipio
 72,091,Manatí Municipio
 72,093,Maricao Municipio
@@ -3219,22 +3212,17 @@ statefp,countyfp,name
 72,105,Naranjito Municipio
 72,107,Orocovis Municipio
 72,109,Patillas Municipio
-72,111,Penuelas Municipio
 72,111,Peñuelas Municipio
 72,113,Ponce Municipio
 72,115,Quebradillas Municipio
 72,117,Rincón Municipio
-72,117,Rincon Municipio
 72,119,Río Grande Municipio
-72,119,Rio Grande Municipio
 72,121,Sabana Grande Municipio
 72,123,Salinas Municipio
 72,125,San Germán Municipio
-72,125,San German Municipio
 72,127,San Juan Municipio
 72,129,San Lorenzo Municipio
 72,131,San Sebastián Municipio
-72,131,San Sebastian Municipio
 72,133,Santa Isabel Municipio
 72,135,Toa Alta Municipio
 72,137,Toa Baja Municipio
