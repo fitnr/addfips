@@ -17,7 +17,7 @@ except:
 
 setup(
     name='addfips',
-    version='0.1.1',
+    version='0.2.0',
     description='Add county FIPS to tabular data',
     long_description=readme,
     keywords='csv census usa data',
