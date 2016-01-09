@@ -21,12 +21,15 @@ def main():
     parser.add_argument('-d', '--delimiter', metavar='CHAR', type=str, help='field delimiter. default: ,')
 
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('-s', '--state-field', metavar='FIELD', type=str, help='Read state name or FIPS code from this field')
+    group.add_argument('-s', '--state-field', metavar='FIELD', type=str,
+                       help='Read state name or FIPS code from this field')
     group.add_argument('-n', '--state-name', metavar='NAME', type=str, help='Use this state for all rows')
 
-    parser.add_argument('-c', '--county-field', metavar='FIELD', type=str, help='default: None')
-    parser.add_argument('-v', '--vintage', type=int, help='2000, 2010, 2015. default: 2015')
-    parser.add_argument('--no-header', action='store_false', dest='header', help='Input has no header now, interpret fields as integers')
+    parser.add_argument('-c', '--county-field', metavar='FIELD', type=str,
+                        help='Read county name from this field. If blank, only state FIPS code will be added')
+    parser.add_argument('-v', '--vintage', type=int, help='2000, 2010, or 2015. default: 2015')
+    parser.add_argument('--no-header', action='store_false', dest='header',
+                        help='Input has no header now, interpret fields as integers')
     parser.set_defaults(delimiter=',', input='/dev/stdin')
 
     args = parser.parse_args()

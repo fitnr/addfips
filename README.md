@@ -71,9 +71,10 @@ optional arguments:
   -n NAME, --state-name NAME
                         Use this state for all rows
   -c FIELD, --county-field FIELD
-                        default: None
+                        Read county name from this field. If blank, only state
+                        FIPS code will be added
   -v VINTAGE, --vintage VINTAGE
-                        2000, 2010, 2015. default: 2015
+                        2000, 2010, or 2015. default: 2015
   --no-header           Input has no header now, interpret fields as integers
 ````
 
