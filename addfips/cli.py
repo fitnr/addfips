@@ -33,6 +33,7 @@ def main():
     af = AddFIPS(args.vintage)
 
     kwargs = {
+        # This may be None, and that's ... OK.
         "state_field": args.state_field
     }
 
@@ -63,7 +64,7 @@ def main():
             if 'county_field' in kwargs:
                 kwargs['county_field'] = int(kwargs.get('county_field')) - 1
 
-            reader = csv.reader(f)
+            reader = csv.reader(f, delimiter=args.delimiter)
             writer = csv.writer(sys.stdout)
 
         writer.writerows(func(row, **kwargs) for row in reader)
