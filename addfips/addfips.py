@@ -13,8 +13,9 @@ Add county FIPS code to a CSV that has state and county names.
 '''
 
 COUNTY_FILES = {
-    '2000': 'data/counties_2000.csv',
-    'current': 'data/counties_2015.csv'
+    2000: 'data/counties_2000.csv',
+    2010: 'data/counties_2010.csv',
+    2015: 'data/counties_2015.csv',
 }
 
 STATES = 'data/states.csv'
@@ -29,7 +30,7 @@ class AddFIPS(object):
 
     def __init__(self, vintage=None):
         if vintage is None or vintage not in COUNTY_FILES:
-            vintage = 'current'
+            vintage = max(COUNTY_FILES.keys())
 
         # load state data
         state_csv = resource_filename('addfips', STATES)
