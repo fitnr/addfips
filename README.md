@@ -45,9 +45,10 @@ You can also clone the repo and install with `python setup.py install`.
 
 * Use full names or postal abbrevations for states
 * Works with all states, territories, and the District of Columbia
-* Fuzzy matching allows for missing diacretic marks and different name formats ('Nye County' or 'Nye')
+* Slightly fuzzy matching allows for missing diacretic marks and different name formats ("Nye County" or "Nye', "Saint Louis" or "St. Louis", "Prince George's" or "Prince Georges")
+* Includes up-to-date 2015 geographies (shout out to Kusilvak Census Area, AK, and Oglala Lakota Co., SD)
 
-(Note that Baltimore city and Baltimore County need to be properly named. Behavior for just passing "Baltimore" is undefined.)
+Note that some states have counties and county-equivalent independent cities with the same names (e.g. Baltimore city & County, MD, Richmond city & County, VA). Add FIPS's behavior may pick the wrong geography if just the name ("Baltimore") is passed.
 
 ## Command line tool
 ````
@@ -64,7 +65,7 @@ optional arguments:
   -h, --help            show this help message and exit
   -V, --version         show program's version number and exit
   -d CHAR, --delimiter CHAR
-                        field delimiter default: ,
+                        field delimiter. default: ,
   -s FIELD, --state-field FIELD
                         Read state name or FIPS code from this field
   -n NAME, --state-name NAME
@@ -72,7 +73,7 @@ optional arguments:
   -c FIELD, --county-field FIELD
                         default: None
   -v VINTAGE, --vintage VINTAGE
-                        2000 or current
+                        2000, 2010, 2015. default: 2015
   --no-header           Has no header now, interpret fields as integers
 ````
 
@@ -82,8 +83,10 @@ Options and flags:
 * `--state-field`: Name of the field containing state name
 * `--state-name`: Name, postal abbreviation or state FIPS code to use for all rows.
 * `--county-field`: Name of the field containing county name. If this is blank, the output will contain the two-character state FIPS code.
-* `--vintage`: pass 2000 to use 2000 county names
+* `--vintage`: Use earlier county names and FIPS codes. For instance, Clifton Forge city, VA, is not included in 2010 or later vintages.
 * `--no-header`: Indicates that the input file has no header. `--state-field` and `--county-field` are parsed as field indices.
+
+The output is a CSV with a new column, "fips", appended to the front. When `addfips` cannot make a match, the fips column will have an empty value.
 
 ### Examples
 
@@ -97,22 +100,24 @@ Add state and county FIPS codes:
 addfips data.csv --state-field fieldName --county-field countyName > data_with_fips.csv
 ````
 
-Use field index for a file with no header row:
+For files with no header row, use a number to refer to the columns with state and/or county names:
 ```
-addfips data_no_header.csv --no-header-row -s 1 > data_no_header_fips.csv
+addfips --no-header-row --state-field 1 --county-field 2 data_no_header.csv > data_no_header_fips.csv
 ```
+
+Column numbers are one-indexed.
 
 Add FIPS for counties from a specific state. These are equivalent:
 ```
-addfips ny_data.csv --state-name NY -c county > ny_data_fips.csv
-addfips ny_data.csv --state-name 'New York' -c county > ny_data_fips.csv
-addfips ny_data.csv --state-name 36 -c county > ny_data_fips.csv
+addfips ny_data.csv -c county --state-name NY > ny_data_fips.csv
+addfips ny_data.csv -c county --state-name 'New York' > ny_data_fips.csv
+addfips ny_data.csv -c county --state-name 36 > ny_data_fips.csv
 ```
 
 Use an alternate delimiter:
 ```
-addfips pipe_delimited.dsv -d'|' -s state > result.csv
-addfips semicolon_delimited.dsv -d';' -s state > result.csv
+addfips -d'|' -s state pipe_delimited.dsv > result.csv
+addfips -d';' -s state semicolon_delimited.dsv > result.csv
 ```
 
 Pipe from other programs:
@@ -144,7 +149,11 @@ Add fips is available for use in your Python scripts:
 
 The results of `AddFIPS.get_state_fips` and `AddFIPS.get_county_fips` are strings, since FIPS codes may have leading zeros.
 
-#### AddFIPS(vintage='current')
+### Classes
+
+#### AddFIPS(vintage=None)
+
+The AddFIPS class takes one keyword argument, `vintage`, which may be either `2000`, `2010` or `2015`. Any other value will use the most recent vintage. Other vintages may be added in the future.
 
 __get_state_fips(self, state)__
 Returns two-digit FIPS code based on  a state name or postal code.
