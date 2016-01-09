@@ -74,7 +74,7 @@ optional arguments:
                         default: None
   -v VINTAGE, --vintage VINTAGE
                         2000, 2010, 2015. default: 2015
-  --no-header           Has no header now, interpret fields as integers
+  --no-header           Input has no header now, interpret fields as integers
 ````
 
 Options and flags:

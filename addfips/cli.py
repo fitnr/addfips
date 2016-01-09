@@ -26,7 +26,7 @@ def main():
 
     parser.add_argument('-c', '--county-field', metavar='FIELD', type=str, help='default: None')
     parser.add_argument('-v', '--vintage', type=int, help='2000, 2010, 2015. default: 2015')
-    parser.add_argument('--no-header', action='store_false', dest='header', help='Has no header now, interpret fields as integers')
+    parser.add_argument('--no-header', action='store_false', dest='header', help='Input has no header now, interpret fields as integers')
     parser.set_defaults(delimiter=',', input='/dev/stdin')
 
     args = parser.parse_args()
