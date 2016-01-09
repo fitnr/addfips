@@ -1,8 +1,8 @@
 # Add FIPS
 
-Add FIPS is a tool for adding county FIPS codes to files that contain county and state names.
+Add FIPS is a tool for adding state or county FIPS codes to files that contain just the names of those geographies.
 
-FIPS codes are the official ID numbers of places in the US. They're invaluable for matching data from  different sources.
+FIPS codes are the official ID numbers of places in the US. They're invaluable for matching data from different sources.
 
 Say you have a CSV file like this:
 
