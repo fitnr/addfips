@@ -134,7 +134,9 @@ class AddFIPS(object):
         :row dict/list A dictionary with state and county names
         :state_field str name of state name field. default: state
         '''
-        state_field = state_field or self.default_state_field
+        if state_field is None:
+            state_field = self.default_state_field
+
         fips = self.get_state_fips(row[state_field])
 
         try:

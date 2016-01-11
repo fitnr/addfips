@@ -90,3 +90,24 @@ class testcli(unittest.TestCase):
 
         assert row['name'] == 'Autauga County'
         assert row['fips'] == '01001'
+
+    def testStateCliCallNoHeader(self):
+        sys.argv = self.st_args[:2] + ['-s', '1', '--no-header']
+        sys.stdout = io.StringIO()
+        addfips_cli.main()
+        sys.stdout.seek(0)
+        reader = csv.reader(sys.stdout)
+        next(reader)
+        row = next(reader)
+
+        assert row[1] == 'Alabama'
+        assert row[0] == '01'
+
+    def testUnmatched(self):
+        assert addfips_cli.unmatched({'fips': None}) is True
+        assert addfips_cli.unmatched([None, 'foo']) is True
+        assert addfips_cli.unmatched(['01001', 'foo']) is False
+        assert addfips_cli.unmatched({'fips': '01001'}) is False
+
+if __name__ == '__main__':
+    unittest.main()
