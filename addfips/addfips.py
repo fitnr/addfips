@@ -44,6 +44,12 @@ class AddFIPS(object):
         r"å": "a",
     }
 
+    abbrevs = {
+        'ft. ': 'fort ',
+        'st. ': 'saint ',
+        'ste. ': 'sainte ',
+    }
+
     def __init__(self, vintage=None):
         if vintage is None or vintage not in COUNTY_FILES:
             vintage = max(COUNTY_FILES.keys())
@@ -79,12 +85,19 @@ class AddFIPS(object):
                 bare_county = re.sub(county_pattern, '', county)
                 state[county] = state[bare_county] = row['countyfp']
 
-                # Special rule for "St." places
-                if re.match(r'st\. ', county):
-                    saint = county.replace('st.', 'saint', 1)
-                    bare_saint = bare_county.replace('st.', 'saint', 1)
-                    state[saint] = state[bare_saint] = row['countyfp']
+                # Add both versions of abbreviated names to the dict.
+                for short, full in self.abbrevs.items():
+                    needle, replace = None, None
 
+                    if county.startswith(short):
+                        needle, replace = short, full
+                    elif county.startswith(full):
+                        needle, replace = full, short
+
+                    if needle is not None:
+                        replaced = county.replace(needle, replace, 1)
+                        bare_replaced = bare_county.replace(needle, replace, 1)
+                        state[replaced] = state[bare_replaced] = row['countyfp']
 
     def _delete_diacretics(self, string):
         return re.sub(self.diacretic_pattern, self.delete_diacretics, string)

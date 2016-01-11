@@ -80,9 +80,20 @@ class testbase(unittest.TestCase):
         assert self.af.get_county_fips('St. Clair County', 'AL') == "01115"
         assert self.af.get_county_fips('St. Clair', 'AL') == "01115"
         assert self.af.get_county_fips('St. Louis City', 'Missouri') == "29510"
+
         self.assertEqual(self.af.get_county_fips('Saint Louis County', 'Missouri'), "29189")
         assert self.af.get_county_fips('Saint Louis County', 'MO') == "29189"
         assert self.af.get_county_fips('Saint Louis City', 'MO') == "29510"
+
+        assert self.af.get_county_fips('Ste. Genevieve County', 'MO') == "29186"
+        assert self.af.get_county_fips('Sainte Genevieve', 'MO') == "29186"
+
+    def testFort(self):
+        assert self.af.get_county_fips('Ft. Bend County', 'Texas') == '48157'
+        assert self.af.get_county_fips('Fort Bend County', 'Texas') == '48157'
+
+        assert self.af.get_county_fips('Beaufort County', 'North Carolina') == '37013'
+        assert self.af.get_county_fips('Beauft. County', 'North Carolina') is None
 
     def testDistrict(self):
         assert self.af.get_county_fips("Manu'a District", "60") == "60020"
