@@ -31,10 +31,7 @@ class testcli(unittest.TestCase):
         self.co_args = ['addfips', self.counties, '-c', 'name', '-s', 'statefp']
 
     def testStateCliSubprocess(self):
-        p = subprocess.Popen(self.st_args, stdout=subprocess.PIPE)
-        out, err = p.communicate()
-
-        assert err is None
+        out = subprocess.check_output(self.st_args)
 
         f = io.StringIO(out.decode('utf8'))
 
@@ -108,6 +105,7 @@ class testcli(unittest.TestCase):
         assert addfips_cli.unmatched([None, 'foo']) is True
         assert addfips_cli.unmatched(['01001', 'foo']) is False
         assert addfips_cli.unmatched({'fips': '01001'}) is False
+
 
 if __name__ == '__main__':
     unittest.main()
