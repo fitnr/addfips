@@ -1,6 +1,6 @@
-# Add FIPS
+# AddFIPS
 
-Add FIPS is a tool for adding state or county FIPS codes to files that contain just the names of those geographies.
+AddFIPS is a tool for adding state or county FIPS codes to files that contain just the names of those geographies.
 
 FIPS codes are the official ID numbers of places in the US. They're invaluable for matching data from different sources.
 
@@ -15,7 +15,7 @@ LA,Orleans,99
 Alaska,Kusilvak,12
 ```
 
-Add FIPS lets you do this:
+AddFIPS lets you do this:
 ```
 > addfips --county-field=county input.csv
 countyfp,state,county,statistic
@@ -28,7 +28,7 @@ countyfp,state,county,statistic
 
 ## Installing
 
-Add FIPS is a Python package, compatible with Python 2.7, Python 3, and pypy. It has no dependencies outside of Python's standard libraries.
+AddFIPS is a Python package, compatible with Python 2.7, Python 3, and pypy. It has no dependencies outside of Python's standard libraries.
 
 If you've used Python packages before:
 ```
@@ -48,7 +48,7 @@ You can also clone the repo and install with `python setup.py install`.
 * Slightly fuzzy matching allows for missing diacretic marks and different name formats ("Nye County" or "Nye', "Saint Louis" or "St. Louis", "Prince George's" or "Prince Georges")
 * Includes up-to-date 2015 geographies (shout out to Kusilvak Census Area, AK, and Oglala Lakota Co., SD)
 
-Note that some states have counties and county-equivalent independent cities with the same names (e.g. Baltimore city & County, MD, Richmond city & County, VA). Add FIPS's behavior may pick the wrong geography if just the name ("Baltimore") is passed.
+Note that some states have counties and county-equivalent independent cities with the same names (e.g. Baltimore city & County, MD, Richmond city & County, VA). AddFIPS's behavior may pick the wrong geography if just the name ("Baltimore") is passed.
 
 ## Command line tool
 ````
@@ -56,7 +56,7 @@ usage: addfips [-h] [-V] [-d CHAR] (-s FIELD | -n NAME) [-c FIELD]
                [-v VINTAGE] [--no-header]
                [input]
 
-Add FIPS codes to a CSV with state and/or county names
+AddFIPS codes to a CSV with state and/or county names
 
 positional arguments:
   input                 Input file. default: stdin
@@ -110,7 +110,7 @@ addfips --no-header-row --state-field 1 --county-field 2 data_no_header.csv > da
 
 Column numbers are one-indexed.
 
-Add FIPS for counties from a specific state. These are equivalent:
+AddFIPS for counties from a specific state. These are equivalent:
 ```
 addfips ny_data.csv -c county --state-name NY > ny_data_fips.csv
 addfips ny_data.csv -c county --state-name 'New York' > ny_data_fips.csv
@@ -143,7 +143,7 @@ addfips -s StateName -c CountyName data.csv | csvsort -c fips > sorted_by_fips.c
 
 ## API
 
-Add fips is available for use in your Python scripts:
+AddFIPS is available for use in your Python scripts:
 ````python
 >>> import addfips
 >>> af = addfips.AddFIPS()
