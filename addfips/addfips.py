@@ -21,6 +21,8 @@ COUNTY_FILES = {
 
 STATES = 'data/states.csv'
 
+COUNTY_PATTERN = r' (county|city|city and borough|borough|census area|municipio|municipality|district|parish)$'
+
 
 class AddFIPS(object):
 
@@ -69,7 +71,6 @@ class AddFIPS(object):
         self.delete_diacretics = lambda x: self.diacretics[x.group()]
 
         # load county data
-        county_pattern = r' (county|city|city and borough|borough|census area|municipio|municipality|district|parish)$'
         county_csv = resource_filename('addfips', COUNTY_FILES[vintage])
         with open(county_csv, 'rt') as f:
             self._counties = dict()
@@ -82,7 +83,7 @@ class AddFIPS(object):
 
                 # Strip diacretics, remove geography name and add both to dict
                 county = self._delete_diacretics(row['name'].lower())
-                bare_county = re.sub(county_pattern, '', county)
+                bare_county = re.sub(COUNTY_PATTERN, '', county)
                 state[county] = state[bare_county] = row['countyfp']
 
                 # Add both versions of abbreviated names to the dict.

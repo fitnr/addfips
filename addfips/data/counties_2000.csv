@@ -1829,7 +1829,7 @@ statefp,countyfp,name
 36,001,Albany County
 36,003,Allegany County
 36,005,Bronx County
-36,005,the Bronx
+36,005,the Bronx Borough
 36,007,Broome County
 36,009,Cattaraugus County
 36,011,Cayuga County
@@ -1851,7 +1851,7 @@ statefp,countyfp,name
 36,043,Herkimer County
 36,045,Jefferson County
 36,047,Kings County
-36,047,Brooklyn
+36,047,Brooklyn Borough
 36,049,Lewis County
 36,051,Livingston County
 36,053,Madison County
@@ -1859,7 +1859,7 @@ statefp,countyfp,name
 36,057,Montgomery County
 36,059,Nassau County
 36,061,New York County
-36,061,Manhattan
+36,061,Manhattan Borough
 36,063,Niagara County
 36,065,Oneida County
 36,067,Onondaga County
@@ -1870,9 +1870,10 @@ statefp,countyfp,name
 36,077,Otsego County
 36,079,Putnam County
 36,081,Queens County
+36,081,Queens Borough
 36,083,Rensselaer County
 36,085,Richmond County
-36,085,Staten Island
+36,085,Staten Island Borough
 36,087,Rockland County
 36,089,St. Lawrence County
 36,091,Saratoga County
@@ -3149,8 +3150,9 @@ statefp,countyfp,name
 60,010,Eastern District
 60,020,Manu'a District
 60,020,Manua District
-60,030,Rose Island
-60,040,Swains Island
+60,030,Rose Island District
+60,030,Rose Atoll District
+60,040,Swains Island District
 60,050,Western District
 66,010,Guam
 69,085,Northern Islands Municipality

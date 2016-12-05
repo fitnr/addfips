@@ -9,8 +9,9 @@
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 
 import unittest
+import re
+from pkg_resources import resource_filename
 from addfips import addfips
-
 
 class testbase(unittest.TestCase):
 
@@ -166,6 +167,21 @@ class testbase(unittest.TestCase):
         self.assertEqual(af2000.get_county_fips('Clifton Forge city', 'Virginia'), "51560")
         assert af2000.get_county_fips('Clifton Forge', 'Virginia') == "51560"
 
+    def testTypos(self):
+        '''Find missing or mistyped geographic names in data files'''
+        for vintage in (2000, 2010, 2015):
+            county_csv = resource_filename('addfips', addfips.COUNTY_FILES[vintage])
+            with open(county_csv) as f:
+                # purge header
+                f.readline()
+                for line in f.readlines():
+                    try:
+                        assert re.search(addfips.COUNTY_PATTERN, line.strip(), flags=re.I)
+                    except AssertionError:
+                        if line.find('11,001') > -1 or line.find('Guam') > -1:
+                            continue
+                        err = 'Did not match county regex: {} ({})'.format(line, vintage)
+                        raise AssertionError(err)
 
 
 if __name__ == '__main__':

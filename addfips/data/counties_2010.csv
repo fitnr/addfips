@@ -68,7 +68,7 @@ statefp,countyfp,name
 01,133,Winston County
 02,013,Aleutians East Borough
 02,016,Aleutians West census area
-02,020,Anchorage Muny
+02,020,Anchorage Municipality
 02,050,Bethel census area
 02,060,Bristol Bay Borough
 02,068,Denali Borough
@@ -88,7 +88,7 @@ statefp,countyfp,name
 02,195,Petersburg census area
 02,198,Prince of Wales-Hyder census area
 02,220,Sitka city and borough
-02,230,Skagway Muny
+02,230,Skagway Municipality
 02,240,Southeast Fairbanks census area
 02,261,Valdez-Cordova census area
 02,270,Wade Hampton census area
@@ -1763,7 +1763,7 @@ statefp,countyfp,name
 32,029,Storey County
 32,031,Washoe County
 32,033,White Pine County
-32,510,Carson City,
+32,510,Carson City
 33,001,Belknap County
 33,003,Carroll County
 33,005,Cheshire County
@@ -1890,6 +1890,10 @@ statefp,countyfp,name
 36,119,Westchester County
 36,121,Wyoming County
 36,123,Yates County
+36,005,the Bronx Borough
+36,047,Brooklyn Borough
+36,061,Manhattan Borough
+36,085,Staten Island Borough
 37,001,Alamance County
 37,003,Alexander County
 37,005,Alleghany County
@@ -3146,8 +3150,9 @@ statefp,countyfp,name
 60,010,Eastern District
 60,020,Manu'a District
 60,020,Manua District
-60,030,Rose Island
-60,040,Swains Island
+60,030,Rose Island District
+60,030,Rose Atoll District
+60,040,Swains Island District
 60,050,Western District
 66,010,Guam
 69,085,Northern Islands Municipality
@@ -3233,6 +3238,6 @@ statefp,countyfp,name
 72,149,Villalba Municipio
 72,151,Yabucoa Municipio
 72,153,Yauco Municipio
-78,010,St. Croix Island
-78,020,St. John Island
-78,030,St. Thomas Island
+78,010,St. Croix Island District
+78,020,St. John Island District
+78,030,St. Thomas Island District
