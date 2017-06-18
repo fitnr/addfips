@@ -1,5 +1,7 @@
 # AddFIPS
 [![Build Status](https://travis-ci.org/fitnr/addfips.svg?branch=master)](https://travis-ci.org/fitnr/addfips)
+[![codecov](https://codecov.io/gh/fitnr/addfips/branch/master/graph/badge.svg)](https://codecov.io/gh/fitnr/addfips)
+
 
 AddFIPS is a tool for adding state or county FIPS codes to files that contain just the names of those geographies.
 
