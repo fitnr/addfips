@@ -149,7 +149,7 @@ AddFIPS is available for use in your Python scripts:
 >>> af = addfips.AddFIPS()
 >>> af.get_state_fips('Puerto Rico')
 '72'
->>> af.get_county_fips('Nye', state_name='Nevada')
+>>> af.get_county_fips('Nye', state='Nevada')
 '32023'
 >>> row = {'county': 'Cook County', 'state': 'IL'}
 >>> af.add_county_fips(row, county_field="county", state_field="state")
