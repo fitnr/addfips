@@ -74,8 +74,13 @@ class AddFIPS(object):
         county_csv = resource_filename('addfips', COUNTY_FILES[vintage])
         with open(county_csv, 'rt') as f:
             self._counties = dict()
+            self._counties_by_fips = dict()
 
             for row in csv.DictReader(f):
+                fips = str(row['statefp']) + str(row['countyfp'])
+                if not self._counties_by_fips.get(fips, None):
+                    self._counties_by_fips[fips] = row['name']
+
                 if row['statefp'] not in self._counties:
                     self._counties[row['statefp']] = {}
 
@@ -128,6 +133,12 @@ class AddFIPS(object):
             return state_fips + counties.get(name)
         except TypeError:
             return None
+
+    def get_county_by_fips(self, fips):
+        '''Get county name from FIPS code'''
+
+        if self._counties_by_fips.get(fips, None):
+            return self._counties_by_fips.get(fips, None)
 
     def add_state_fips(self, row, state_field=None):
         '''
