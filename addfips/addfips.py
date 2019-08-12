@@ -79,7 +79,7 @@ class AddFIPS(object):
             for row in csv.DictReader(f):
                 fips = str(row['statefp']) + str(row['countyfp'])
                 if not self._counties_by_fips.get(fips, None):
-                    self._counties_by_fips[fips] = row['name']
+                    self._counties_by_fips[int(fips)] = row['name']
 
                 if row['statefp'] not in self._counties:
                     self._counties[row['statefp']] = {}
