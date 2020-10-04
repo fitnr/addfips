@@ -28,7 +28,7 @@ countyfp,state,county,statistic
 
 ## Installing
 
-AddFIPS is a Python package, compatible with Python 2.7, Python 3, and pypy. It has no dependencies outside of Python's standard libraries.
+AddFIPS is a Python package compatible with Python 3.
 
 If you've used Python packages before:
 ```
