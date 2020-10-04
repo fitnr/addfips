@@ -17,6 +17,7 @@ COUNTY_FILES = {
     2000: 'data/counties_2000.csv',
     2010: 'data/counties_2010.csv',
     2015: 'data/counties_2015.csv',
+    2020: 'data/counties_2015.csv',
 }
 
 STATES = 'data/states.csv'
@@ -65,7 +66,7 @@ class AddFIPS:
         self._counties = self._load_county_data(vintage)
 
     def _load_state_data(self):
-        with self.data.joinpath(STATES).open() as f:
+        with self.data.joinpath(STATES).open('rt') as f:
             reader = csv.DictReader(f)
             states = {}
             state_fips = {}
@@ -79,7 +80,7 @@ class AddFIPS:
         return states, state_fips
 
     def _load_county_data(self, vintage):
-        with self.data.joinpath(COUNTY_FILES[vintage]).open() as f:
+        with self.data.joinpath(COUNTY_FILES[vintage]).open('rt') as f:
             counties = {}
             for row in csv.DictReader(f):
                 if row['statefp'] not in counties:
