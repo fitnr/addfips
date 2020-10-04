@@ -17,4 +17,4 @@ install:
     - python setup.py install
 
 script:
-    - python -m unittest tests/*.py
+    - python -m unittest

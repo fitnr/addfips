@@ -16,7 +16,7 @@ format:
 	pylint addfips
 
 test:
-	coverage run --source addfips -m unittest tests/*.py
+	coverage run --source addfips -m unittest
 
 deploy:
 	twine register
