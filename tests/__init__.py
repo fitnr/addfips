@@ -8,5 +8,4 @@
 # http://opensource.org/licenses/GPL-3.0
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 
-from . import base
-from . import test_cli
+__all__ = ['test_base', 'test_cli']

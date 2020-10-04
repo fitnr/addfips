@@ -10,17 +10,16 @@
 cov: | test
 	coverage html
 
+format:
+	black addfips
+	pylint addfips
+
 test:
 	coverage run --include=addfips/* setup.py test
 
-deploy: README.rst
+deploy:
 	twine register
 	git push; git push --tags
 	rm -rf dist build
 	python3 setup.py bdist_wheel --universal
 	twine upload dist/*
-
-README.rst: README.md
-	- pandoc $< -o $@
-	@touch $@
-	python setup.py check -r -s -m -q

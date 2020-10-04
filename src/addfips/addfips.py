@@ -5,13 +5,13 @@
 # Licensed under the GPL-v3.0 license:
 # http://opensource.org/licenses/GPL-3.0
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
-import csv
-import re
-from pkg_resources import resource_filename
-
 '''
 Add county FIPS code to a CSV that has state and county names.
 '''
+import csv
+import re
+
+from importlib_resources import files
 
 COUNTY_FILES = {
     2000: 'data/counties_2000.csv',
@@ -21,65 +21,71 @@ COUNTY_FILES = {
 
 STATES = 'data/states.csv'
 
-COUNTY_PATTERN = r' (county|city|city and borough|borough|census area|municipio|municipality|district|parish)$'
+COUNTY_PATTERN = r" (county|city|city and borough|borough|census area|municipio|municipality|district|parish)$"
+
+DIACRETICS = {
+    r"ñ": "n",
+    r"'": "",
+    r"ó": "o",
+    r"í": "i",
+    r"á": "a",
+    r"ü": "u",
+    r"é": "e",
+    r"î": "i",
+    r"è": "e",
+    r"à": "a",
+    r"ì": "i",
+    r"å": "a",
+}
+ABBREVS = {
+    'ft. ': 'fort ',
+    'st. ': 'saint ',
+    'ste. ': 'sainte ',
+}
 
 
-class AddFIPS(object):
+class AddFIPS:
 
     """Get state or county FIPS codes"""
 
     default_county_field = 'county'
     default_state_field = 'state'
-
-    diacretics = {
-        r"ñ": "n",
-        r"'": "",
-        r"ó": "o",
-        r"í": "i",
-        r"á": "a",
-        r"ü": "u",
-        r"é": "e",
-        r"î": "i",
-        r"è": "e",
-        r"à": "a",
-        r"ì": "i",
-        r"å": "a",
-    }
-
-    abbrevs = {
-        'ft. ': 'fort ',
-        'st. ': 'saint ',
-        'ste. ': 'sainte ',
-    }
+    data = files('addfips')
 
     def __init__(self, vintage=None):
+        # Handle de-diacreticizing
+        self.diacretic_pattern = '(' + ('|'.join(DIACRETICS)) + ')'
+        self.delete_diacretics = lambda x: DIACRETICS[x.group()]
+
         if vintage is None or vintage not in COUNTY_FILES:
             vintage = max(COUNTY_FILES.keys())
 
-        # load state data
-        state_csv = resource_filename('addfips', STATES)
-        with open(state_csv, 'rt') as f:
-            s = list(csv.DictReader(f))
-            postals = dict((row['postal'].lower(), row['fips']) for row in s)
-            names = dict((row['name'].lower(), row['fips']) for row in s)
-            fips = dict((row['fips'], row['fips']) for row in s)
-            self._state_fips = frozenset(fips)
-            self._states = dict(list(postals.items()) + list(names.items()) + list(fips.items()))
+        self._states, self._state_fips = self._load_state_data()
 
-        # Handle de-diacreticizing
-        self.diacretic_pattern = '(' + ('|'.join(self.diacretics)) + ')'
-        self.delete_diacretics = lambda x: self.diacretics[x.group()]
+        self._counties = self._load_county_data(vintage)
 
-        # load county data
-        county_csv = resource_filename('addfips', COUNTY_FILES[vintage])
-        with open(county_csv, 'rt') as f:
-            self._counties = dict()
+    def _load_state_data(self):
+        with self.data.joinpath(STATES).open() as f:
+            reader = csv.DictReader(f)
+            states = {}
+            state_fips = {}
+            for row in reader:
+                states[row['postal'].lower()] = row['fips']
+                states[row['name'].lower()] = row['fips']
+                state_fips[row['fips']] = row['fips']
 
+            state_fips = frozenset(state_fips)
+
+        return states, state_fips
+
+    def _load_county_data(self, vintage):
+        with self.data.joinpath(COUNTY_FILES[vintage]).open() as f:
+            counties = {}
             for row in csv.DictReader(f):
-                if row['statefp'] not in self._counties:
-                    self._counties[row['statefp']] = {}
+                if row['statefp'] not in counties:
+                    counties[row['statefp']] = {}
 
-                state = self._counties[row['statefp']]
+                state = counties[row['statefp']]
 
                 # Strip diacretics, remove geography name and add both to dict
                 county = self._delete_diacretics(row['name'].lower())
@@ -87,7 +93,7 @@ class AddFIPS(object):
                 state[county] = state[bare_county] = row['countyfp']
 
                 # Add both versions of abbreviated names to the dict.
-                for short, full in self.abbrevs.items():
+                for short, full in ABBREVS.items():
                     needle, replace = None, None
 
                     if county.startswith(short):
@@ -99,6 +105,7 @@ class AddFIPS(object):
                         replaced = county.replace(needle, replace, 1)
                         bare_replaced = bare_county.replace(needle, replace, 1)
                         state[replaced] = state[bare_replaced] = row['countyfp']
+        return counties
 
     def _delete_diacretics(self, string):
         return re.sub(self.diacretic_pattern, self.delete_diacretics, string)
@@ -115,11 +122,11 @@ class AddFIPS(object):
         return self._states.get(state.lower())
 
     def get_county_fips(self, county, state):
-        '''
+        """
         Get a county's FIPS code.
         :county str County name
         :state str Name, postal abbreviation or FIPS code for a state
-        '''
+        """
         state_fips = self.get_state_fips(state)
         counties = self._counties.get(state_fips, {})
 
@@ -130,11 +137,11 @@ class AddFIPS(object):
             return None
 
     def add_state_fips(self, row, state_field=None):
-        '''
+        """
         Add state FIPS to a dictionary.
         :row dict/list A dictionary with state and county names
         :state_field str name of state name field. default: state
-        '''
+        """
         if state_field is None:
             state_field = self.default_state_field
 
@@ -147,14 +154,14 @@ class AddFIPS(object):
         return row
 
     def add_county_fips(self, row, county_field=None, state_field=None, state=None):
-        '''
+        """
         Add county FIPS to a dictionary containing a state name, FIPS code, or using a passed state name or FIPS code.
         :row dict/list A dictionary with state and county names
         :county_field str county name field. default: county
         :state_fips_field str state FIPS field containing state fips
         :state_field str state name field. default: county
         :state str State name, postal abbreviation or FIPS code to use
-        '''
+        """
         if state:
             state_fips = self.get_state_fips(state)
         else:

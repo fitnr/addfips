@@ -11,15 +11,16 @@
 from setuptools import setup
 
 try:
-    readme = open('README.rst').read()
+    README = open('README.md').read()
 except:
-    readme = ''
+    README = ''
 
 setup(
     name='addfips',
     version='0.2.2',
     description='Add county FIPS to tabular data',
-    long_description=readme,
+    long_description=README,
+    long_description_content_type='text/markdown',
     keywords='csv census usa data',
     author='Neil Freeman',
     author_email='contact@fakeisthenewreal.org',
@@ -31,22 +32,22 @@ setup(
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English',
         'Operating System :: Unix',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Operating System :: OS Independent',
     ],
     packages=['addfips'],
+    package_dir={'': 'src'},
+    package_data={'addfips': ['data/*.csv']},
     include_package_data=True,
-    package_data={
-        'addfips': ['data/*.csv']
-    },
     entry_points={
         'console_scripts': [
-            'addfips=addfips.cli:main',
+            'addfips=addfips.__main__:main',
         ],
     },
-    zip_safe=False,
-    test_suite='tests'
+    zip_safe=True,
+    test_suite='tests',
+    install_requires=[
+        "importlib_resources>=2.0.1"
+    ],
 )

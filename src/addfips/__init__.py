@@ -8,6 +8,10 @@
 # http://opensource.org/licenses/GPL-3.0
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 
+"""
+Add FIPS codes to lists and files that contain the names of US state and counties.
+"""
+
 from .addfips import AddFIPS
 
 __version__ = '0.2.2'
