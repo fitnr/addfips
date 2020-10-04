@@ -50,4 +50,5 @@ setup(
     install_requires=[
         "importlib_resources>=2.0.1"
     ],
+    python_requires='>=3.6.0',
 )
