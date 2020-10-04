@@ -8,10 +8,10 @@
 # pylint: disable=missing-docstring,invalid-name
 import csv
 import io
-from os import path
 import subprocess
 import sys
 import unittest
+from os import path
 
 from addfips import __main__ as addfips_cli
 

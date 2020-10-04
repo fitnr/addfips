@@ -45,7 +45,7 @@ setup(
             'addfips=addfips.__main__:main',
         ],
     },
-    zip_safe=True,
+    zip_safe=False,
     test_suite='tests',
     install_requires=[
         "importlib_resources>=2.0.1"
