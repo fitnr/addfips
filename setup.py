@@ -17,7 +17,7 @@ except:
 
 setup(
     name='addfips',
-    version='0.3.0',
+    version='0.3.1',
     description='Add county FIPS to tabular data',
     long_description=README,
     long_description_content_type='text/markdown',

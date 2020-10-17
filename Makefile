@@ -19,7 +19,6 @@ test:
 	coverage run --source addfips -m unittest
 
 deploy:
-	twine register
 	git push; git push --tags
 	rm -rf dist build
 	python3 setup.py bdist_wheel --python-tag py3
