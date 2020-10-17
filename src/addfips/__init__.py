@@ -14,6 +14,6 @@ Add FIPS codes to lists and files that contain the names of US state and countie
 
 from .addfips import AddFIPS
 
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 
 __all__ = ['addfips']
