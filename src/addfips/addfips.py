@@ -17,7 +17,7 @@ COUNTY_FILES = {
     2000: 'data/counties_2000.csv',
     2010: 'data/counties_2010.csv',
     2015: 'data/counties_2015.csv',
-    2020: 'data/counties_2015.csv',
+    2020: 'data/counties_2020.csv',
 }
 
 STATES = 'data/states.csv'

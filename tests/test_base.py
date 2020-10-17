@@ -15,7 +15,6 @@ from addfips import addfips
 
 
 class TestAddFips(unittest.TestCase):
-
     def setUp(self):
         self.af = addfips.AddFIPS()
 
@@ -34,33 +33,29 @@ class TestAddFips(unittest.TestCase):
         self.assertIn(2015, addfips.COUNTY_FILES)
 
     def test_typos(self):
-        '''Find missing or mistyped geographic names in data files'''
-        for vintage in (2000, 2010, 2015):
+        """Find missing or mistyped geographic names in data files."""
+        for vintage in (2000, 2010, 2015, 2020):
             county_csv = files('addfips').joinpath(addfips.COUNTY_FILES[vintage])
+
+            pat = re.compile(addfips.COUNTY_PATTERN, flags=re.I)
+
             with county_csv.open() as f:
                 # purge header
                 f.readline()
                 for line in f.readlines():
                     try:
-                        assert re.search(addfips.COUNTY_PATTERN, line.strip(), flags=re.I)
-                    except AssertionError:
+                        self.assertIsNotNone(pat.search(line.strip()))
+                    except AssertionError as error:
                         if line.find('11,001') > -1 or line.find('Guam') > -1:
                             continue
-                        err = 'Did not match county regex: {} ({})'.format(line, vintage)
-                        raise AssertionError(err)
+                        msg = 'Did not match county regex: {} ({})'.format(line, vintage)
+                        raise AssertionError(msg) from error
 
 
 class TestData(unittest.TestCase):
-
     def setUp(self):
         self.af = addfips.AddFIPS()
-        self.row = {
-            'county': 'Kings',
-            'borough': 'Brooklyn',
-            'state': 'New York',
-            'statefp': '36',
-            'foo': 'bar'
-        }
+        self.row = {'county': 'Kings', 'borough': 'Brooklyn', 'state': 'New York', 'statefp': '36', 'foo': 'bar'}
         self.list = ['Kings', 'Brooklyn', 'New York', 'NY', '36']
 
     def test_get_state(self):
@@ -189,6 +184,10 @@ class TestData(unittest.TestCase):
 
     def test_district(self):
         assert self.af.get_county_fips("Manu'a District", "60") == "60020"
+
+    def test_county2020(self):
+        """Check 2020 addition to county list."""
+        self.assertEqual(self.af.get_county_fips("Copper River Census Area", "02"), "02066")
 
 
 if __name__ == '__main__':

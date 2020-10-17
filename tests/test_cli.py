@@ -17,7 +17,6 @@ from addfips import __main__ as addfips_cli
 
 
 class TestCli(unittest.TestCase):
-
     def setUp(self):
         dirname = path.join(path.dirname(__file__), 'data')
 

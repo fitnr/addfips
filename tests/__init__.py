@@ -8,4 +8,6 @@
 # http://opensource.org/licenses/GPL-3.0
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 
+"""Tests for addFIPS."""
+
 __all__ = ['test_base', 'test_cli']
