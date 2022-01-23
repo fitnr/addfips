@@ -5,22 +5,26 @@
 # http://opensource.org/licenses/GPL-3.0
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
 
-.PHONY: test format cov deploy
+.PHONY: all cov format test publish
+
+all:
 
 cov: | test
+	coverage run --branch --source addfips -m unittest
 	coverage report
-	coverage html
 
 format:
-	black addfips
-	pylint addfips
+	black src
+	isort src
+	pylint src
 
 test:
-	coverage run --source addfips -m unittest
+	python -m unittest
 
-deploy:
-	git push; git push --tags
-	rm -rf dist build
-	python3 setup.py bdist_wheel --python-tag py3
-	python3 setup.py sdist
+publish: build
 	twine upload dist/*
+
+build: | clean
+	python -m build
+
+clean:; rm -rf dist build

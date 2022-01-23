@@ -28,7 +28,7 @@ countyfp,state,county,statistic
 
 ## Installing
 
-AddFIPS is a Python package compatible with Python 3.
+AddFIPS is a Python package compatible with versions 3.7+.
 
 If you've used Python packages before:
 ```
@@ -38,8 +38,6 @@ pip install --user addfips
 ```
 
 If you haven't used Python packages before, [get pip](http://pip.readthedocs.org/en/stable/installing/), then come back.
-
-You can also clone the repo and install with `python setup.py install`.
 
 ## Features
 

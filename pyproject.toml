@@ -1,13 +1,24 @@
+[build-system]
+requires = ["setuptools>=60.5.0", "wheel"]
+build-backend = 'setuptools.build_meta'
+
 [tool.black]
 line-length = 120
-target-version = ["py38"]
+target-version = [
+	"py38",
+	"py39",
+	"py310"
+	]
 skip-string-normalization = true
 
 [tool.isort]
-line_length = 120
+profile = "black"
 
 [tool.pylint.master]
 fail-under = "9.5"
 
 [tool.pylint.format]
 max-line-length = 120
+disable = [
+	"C0103",
+]
