@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # This file is part of addfips.
 # http://github.com/fitnr/addfips
@@ -9,7 +8,10 @@
 import re
 import unittest
 
-from importlib_resources import files
+try:
+    from importlib.resources import files
+except ImportError:
+    from importlib_resources import files
 
 from addfips import addfips
 
@@ -26,6 +28,8 @@ class TestAddFips(unittest.TestCase):
         assert self.af.get_county_fips('foo', 'bar') is None
         assert self.af.get_county_fips('foo', state='New York') is None
         assert self.af.get_state_fips('foo') is None
+        self.assertIsNone(self.af.get_state_fips(None))
+        self.assertEqual(self.af.add_state_fips({"state":"Illinois"}).get("fips"), "17")
 
     def test_vintages(self):
         self.assertIn(2000, addfips.COUNTY_FILES)

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # This file is part of addfips.
 # http://github.com/fitnr/addfips
-
 # Licensed under the GPL-v3.0 license:
 # http://opensource.org/licenses/GPL-3.0
 # Copyright (c) 2016, fitnr <fitnr@fakeisthenewreal>
@@ -11,7 +10,11 @@ Add county FIPS code to a CSV that has state and county names.
 import csv
 import re
 
-from importlib_resources import files
+try:
+    from importlib.resources import files
+except ImportError:
+    from importlib_resources import files
+
 
 COUNTY_FILES = {
     2000: 'data/counties_2000.csv',

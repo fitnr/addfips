@@ -9,9 +9,9 @@
 
 all:
 
-cov: | test
+cov:
 	coverage run --branch --source addfips -m unittest
-	coverage report
+	coverage report -m
 
 format:
 	black src
