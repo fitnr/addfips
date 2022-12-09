@@ -76,7 +76,7 @@ def main():
     else:
         func = addfips.add_state_fips
 
-    with open(args.input, 'rt') as f:
+    with open(args.input, 'rt', encoding="utf8") as f:
         signal(SIGPIPE, SIG_DFL)
 
         if args.header:

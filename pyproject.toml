@@ -1,6 +1,53 @@
 [build-system]
-requires = ["setuptools>=60.5.0", "wheel"]
-build-backend = 'setuptools.build_meta'
+requires = ["setuptools>=61.1.1", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "addfips"
+version = "0.4.0"
+description = "Add county FIPS to tabular data"
+readme = "README.md"
+authors = [
+    {name = "Neil Freeman", email = "contact@fakeisthenewreal.org"}
+]
+keywords = ["usa", "data", "federal information processing standard"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+    "Natural Language :: English",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)"
+    ]
+license = {file = "LICENSE"}
+requires-python = ">=3.7"
+dependencies = [
+    "importlib_resources; python_version < '3.9'",
+]
+
+[project.urls]
+Homepage = "http://github.com/fitnr/addfips"
+
+[project.optional-dependencies]
+tests = [
+    "coverage[toml]>=6"
+]
+
+[tool.setuptools]
+zip-safe = true
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["*.csv"]
+
+[project.scripts]
+addfips = "addfips.__main__:main"
 
 [tool.black]
 line-length = 120
@@ -22,3 +69,6 @@ max-line-length = 120
 disable = [
 	"C0103",
 ]
+
+[tool.pylint.basic]
+good-names = "i,j,k,f,g"
