@@ -69,7 +69,7 @@ class AddFIPS:
         self._counties = self._load_county_data(vintage)
 
     def _load_state_data(self):
-        with self.data.joinpath(STATES).open('rt') as f:
+        with self.data.joinpath(STATES).open('rt', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             states = {}
             state_fips = {}
@@ -83,7 +83,7 @@ class AddFIPS:
         return states, state_fips
 
     def _load_county_data(self, vintage):
-        with self.data.joinpath(COUNTY_FILES[vintage]).open('rt') as f:
+        with self.data.joinpath(COUNTY_FILES[vintage]).open('rt', encoding='utf-8') as f:
             counties = {}
             for row in csv.DictReader(f):
                 if row['statefp'] not in counties:
