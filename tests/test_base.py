@@ -43,7 +43,7 @@ class TestAddFips(unittest.TestCase):
 
             pat = re.compile(addfips.COUNTY_PATTERN, flags=re.I)
 
-            with county_csv.open() as f:
+            with county_csv.open(encoding="utf8") as f:
                 # purge header
                 f.readline()
                 for line in f.readlines():
@@ -52,7 +52,7 @@ class TestAddFips(unittest.TestCase):
                     except AssertionError as error:
                         if line.find('11,001') > -1 or line.find('Guam') > -1:
                             continue
-                        msg = 'Did not match county regex: {} ({})'.format(line, vintage)
+                        msg = f'Did not match county regex: {line} ({vintage})'
                         raise AssertionError(msg) from error
 
 

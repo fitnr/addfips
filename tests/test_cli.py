@@ -37,15 +37,14 @@ class TestCli(unittest.TestCase):
         assert row.get('fips') == '01'
 
     def test_county_cli_subprocess(self):
-        p = subprocess.Popen(self.co_args, stdout=subprocess.PIPE)
-        out, err = p.communicate()
+        with subprocess.Popen(self.co_args, stdout=subprocess.PIPE) as proc:
+            out, err = proc.communicate()
 
         assert err is None
 
-        f = io.StringIO(out.decode('utf-8'))
-
-        reader = csv.DictReader(f)
-        row = next(reader)
+        with io.StringIO(out.decode('utf-8')) as f:
+            reader = csv.DictReader(f)
+            row = next(reader)
 
         self.assertIn('county', row.keys())
         self.assertIn('fips', row.keys())
