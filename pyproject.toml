@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "addfips"
-version = "0.4.0"
+version = "0.4.1"
 description = "Add county FIPS to tabular data"
 readme = "README.md"
 authors = [
