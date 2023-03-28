@@ -86,25 +86,31 @@ class TestData(unittest.TestCase):
         assert new['foo'] == 'bar'
 
     def test_vintage2020(self):
-        self.assertIsNone(self.af.get_county_fips('Bedford city', 'VA'))
-        self.assertIsNone(self.af.get_county_fips('Clifton Forge', 'VA'))
-        self.assertIsNone(self.af.get_county_fips('Valdez-Cordova', 'AK'))
+        af20 = addfips.AddFIPS(vintage=2020)
+        self.assertIsNone(af20.get_county_fips('Bedford city', 'VA'))
+        self.assertIsNone(af20.get_county_fips('Clifton Forge', 'VA'))
+        self.assertIsNone(af20.get_county_fips('Valdez-Cordova', 'AK'))
 
     def test_vintage2015(self):
-        self.assertIsNone(self.af.get_county_fips('Clifton Forge', 'VA'))
-        self.assertIsNone(self.af.get_county_fips('Bedford city', 'VA'))
-        self.assertIsNotNone(self.af.get_county_fips('Valdez-Cordova', 'AK'))
+        af15 = addfips.AddFIPS(vintage=2015)
+        self.assertIsNone(af15.get_county_fips('Clifton Forge', 'VA'))
+        self.assertIsNone(af15.get_county_fips('Bedford city', 'VA'))
+        self.assertIsNotNone(af15.get_county_fips('Valdez-Cordova', 'AK'))
 
     def test_vintage2010(self):
         af2010 = addfips.AddFIPS(vintage=2010)
         assert af2010.get_county_fips('Wade Hampton', 'Alaska') == '02270'
         self.assertIsNone(af2010.get_county_fips('Clifton Forge', 'VA'))
+        self.assertIsNotNone(af2010.get_county_fips('Bedford city', 'VA'))
+        self.assertIsNotNone(af2010.get_county_fips('Valdez-Cordova', 'AK'))
 
     def test_vintage2000(self):
         af2000 = addfips.AddFIPS(vintage=2000)
         assert af2000.get_county_fips('Wade Hampton', 'Alaska') == '02270'
         self.assertEqual(af2000.get_county_fips('Clifton Forge city', 'Virginia'), "51560")
         assert af2000.get_county_fips('Clifton Forge', 'Virginia') == "51560"
+        self.assertIsNotNone(af2000.get_county_fips('Bedford city', 'VA'))
+        self.assertIsNotNone(af2000.get_county_fips('Valdez-Cordova', 'AK'))
 
     def test_get_county(self):
         # Full County Name with various ways of ID'ing state
