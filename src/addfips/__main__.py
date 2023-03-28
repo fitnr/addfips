@@ -11,7 +11,7 @@ import csv
 import sys
 from signal import SIG_DFL, SIGPIPE, signal
 
-from . import __version__ as version
+from . import __version__ as version, VINTAGES
 from .addfips import AddFIPS
 
 
@@ -48,7 +48,7 @@ def main():
         type=str,
         help='Read county name from this field. If blank, only state FIPS code will be added',
     )
-    parser.add_argument('-v', '--vintage', type=int, help='2000, 2010, or 2015. default: 2015')
+    parser.add_argument('-v', '--vintage', choices=VINTAGES, help='Data era. Default: 2020')
     parser.add_argument(
         '--no-header', action='store_false', dest='header', help='Input has no header now, interpret fields as integers'
     )

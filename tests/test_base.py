@@ -13,7 +13,7 @@ try:
 except ImportError:
     from importlib_resources import files
 
-from addfips import addfips
+from addfips import VINTAGES, addfips
 
 
 class TestAddFips(unittest.TestCase):
@@ -35,6 +35,8 @@ class TestAddFips(unittest.TestCase):
         self.assertIn(2000, addfips.COUNTY_FILES)
         self.assertIn(2010, addfips.COUNTY_FILES)
         self.assertIn(2015, addfips.COUNTY_FILES)
+        self.assertIn(2020, addfips.COUNTY_FILES)
+        self.assertIn(2020, VINTAGES)
 
     def test_typos(self):
         """Find missing or mistyped geographic names in data files."""

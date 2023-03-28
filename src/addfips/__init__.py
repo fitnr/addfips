@@ -14,3 +14,5 @@ from .addfips import AddFIPS
 __version__ = '0.4.1'
 
 __all__ = ['addfips']
+
+VINTAGES = (2000, 2010, 2015, 2020)
