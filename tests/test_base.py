@@ -85,8 +85,15 @@ class TestData(unittest.TestCase):
         assert new['fips'] == '36047'
         assert new['foo'] == 'bar'
 
+    def test_vintage2020(self):
+        self.assertIsNone(self.af.get_county_fips('Bedford city', 'VA'))
+        self.assertIsNone(self.af.get_county_fips('Clifton Forge', 'VA'))
+        self.assertIsNone(self.af.get_county_fips('Valdez-Cordova', 'AK'))
+
     def test_vintage2015(self):
         self.assertIsNone(self.af.get_county_fips('Clifton Forge', 'VA'))
+        self.assertIsNone(self.af.get_county_fips('Bedford city', 'VA'))
+        self.assertIsNotNone(self.af.get_county_fips('Valdez-Cordova', 'AK'))
 
     def test_vintage2010(self):
         af2010 = addfips.AddFIPS(vintage=2010)

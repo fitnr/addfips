@@ -88,13 +88,11 @@ statefp,countyfp,name
 02,180,Nome Census Area
 02,185,North Slope Borough
 02,188,Northwest Arctic Borough
-02,195,Petersburg Census Area
 02,195,Petersburg Borough
 02,198,Prince of Wales-Hyder Census Area
 02,220,Sitka City and Borough
 02,230,Skagway Municipality
 02,240,Southeast Fairbanks Census Area
-02,261,Valdez-Cordova Census Area
 02,275,Wrangell City and Borough
 02,282,Yakutat City and Borough
 02,290,Yukon-Koyukuk Census Area
@@ -2924,7 +2922,6 @@ statefp,countyfp,name
 51,197,Wythe County
 51,199,York County
 51,510,Alexandria city
-51,515,Bedford city
 51,520,Bristol city
 51,530,Buena Vista city
 51,540,Charlottesville city
