@@ -168,6 +168,12 @@ Returns two-digit FIPS code based on  a state name or postal code.
 __get_county_fips(self, county, state)__
 Returns five-digit FIPS code based on county name and state name/abbreviation/FIPS.
 
+__get_state_from_fips(self, fips)__
+Returns state name based on a five-digit or two-digit FIPS code.
+
+__get_county_from_fips(self, fips)__
+Returns county name based on the five-digit FIPS code.
+
 __add_state_fips(self, row, state_field='state')__
 Returns the input row with a two-figit state FIPS code added.
 Input row may be either a `dict` or a `list`. If a `dict`, the 'fips' key is added. If a `list`, the FIPS code is added at the start of the list.

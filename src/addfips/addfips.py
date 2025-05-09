@@ -57,6 +57,9 @@ class AddFIPS:
     data = files('addfips')
 
     def __init__(self, vintage=None):
+        self.state_fips_to_name = {}
+        self.county_fips_to_name = {}
+
         # Handle de-diacreticizing
         self.diacretic_pattern = '(' + ('|'.join(DIACRETICS)) + ')'
         self.delete_diacretics = lambda x: DIACRETICS[x.group()]
@@ -77,6 +80,8 @@ class AddFIPS:
                 states[row['postal'].lower()] = row['fips']
                 states[row['name'].lower()] = row['fips']
                 state_fips[row['fips']] = row['fips']
+                # Build the FIPS-to-name map
+                self.state_fips_to_name[row['fips']] = row['name']
 
             state_fips = frozenset(state_fips)
 
@@ -86,6 +91,13 @@ class AddFIPS:
         with self.data.joinpath(COUNTY_FILES[vintage]).open('rt', encoding='utf-8') as f:
             counties = {}
             for row in csv.DictReader(f):
+                statefp = row['statefp']
+                countyfp = row['countyfp']
+                full_fips = statefp + countyfp
+
+                # Save original county name for reverse lookup
+                self.county_fips_to_name[full_fips] = row['name'].lower()
+
                 if row['statefp'] not in counties:
                     counties[row['statefp']] = {}
 
@@ -182,3 +194,33 @@ class AddFIPS:
             row.insert(0, fips)
 
         return row
+
+    def get_county_from_fips(self, fips):
+        """
+        Get the county of a FIPS code.
+        :fips str FIPS code
+        """
+        if not fips or len(fips) != 5:
+            return None, None
+
+        county_name = self.county_fips_to_name.get(fips)
+
+        if county_name:
+            return county_name.title()
+
+        return None
+    
+    def get_state_from_fips(self, fips):
+        """
+        Get the state of a FIPS code.
+        :fips str FIPS code
+        """
+        if not fips:
+            return None
+        
+        if len(fips) == 5:
+            state_fips = fips[:2]
+            return self.state_fips_to_name.get(state_fips)
+        if len(fips) == 2:
+            return self.state_fips_to_name.get(fips)
+        return None

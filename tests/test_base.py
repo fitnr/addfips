@@ -193,6 +193,15 @@ class TestData(unittest.TestCase):
         """Check 2020 addition to county list."""
         self.assertEqual(self.af.get_county_fips("Copper River Census Area", "02"), "02066")
 
+    def test_reverse_lookup(self):
+        # Get the FIPS code for a county and then get the county name back from it
+        fips = self.af.get_county_fips("Los Angeles County", "California")
+        assert fips == "06037"
+        county_name = self.af.get_county_from_fips(fips)
+        assert county_name == "Los Angeles County"
+        state_name = self.af.get_state_from_fips(fips)
+        assert state_name == "California"
+        assert self.af.get_state_from_fips("48") == self.af.get_state_from_fips("48157")
 
 if __name__ == '__main__':
     unittest.main()
