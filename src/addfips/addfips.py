@@ -30,6 +30,7 @@ COUNTY_PATTERN = r" (county|city|city and borough|borough|census area|municipio|
 DIACRETICS = {
     r"ñ": "n",
     r"'": "",
+    r".": "",
     r"ó": "o",
     r"í": "i",
     r"á": "a",
@@ -41,10 +42,11 @@ DIACRETICS = {
     r"ì": "i",
     r"å": "a",
 }
+
 ABBREVS = {
-    'ft. ': 'fort ',
-    'st. ': 'saint ',
-    'ste. ': 'sainte ',
+    'ft ': 'fort ',
+    'st ': 'saint ',
+    'ste ': 'sainte ',
 }
 
 
@@ -56,9 +58,9 @@ class AddFIPS:
     default_state_field = 'state'
     data = files('addfips')
 
-    def __init__(self, vintage=None):
+    def __init__(self, vintage=None, external_county_data=None):
         # Handle de-diacreticizing
-        self.diacretic_pattern = '(' + ('|'.join(DIACRETICS)) + ')'
+        self.diacretic_pattern = '|'.join(re.escape(key) for key in DIACRETICS)
         self.delete_diacretics = lambda x: DIACRETICS[x.group()]
 
         if vintage is None or vintage not in COUNTY_FILES:
@@ -66,7 +68,10 @@ class AddFIPS:
 
         self._states, self._state_fips = self._load_state_data()
 
-        self._counties = self._load_county_data(vintage)
+        if external_county_data: 
+            self._counties = self._load_county_data_from_external_source(external_county_data)
+        else:
+            self._counties = self._load_county_data(vintage)
 
     def _load_state_data(self):
         with self.data.joinpath(STATES).open('rt', encoding='utf-8') as f:
@@ -82,35 +87,46 @@ class AddFIPS:
 
         return states, state_fips
 
+    def _normalize_county_data(self, row, counties):
+        if row['statefp'] not in counties:
+            counties[row['statefp']] = {}
+
+        state = counties[row['statefp']]
+
+        # Strip diacretics, remove geography name and add both to dict
+        county = self._delete_diacretics(row['name'].lower())
+        bare_county = re.sub(COUNTY_PATTERN, '', county)
+        state[county] = state[bare_county] = row['countyfp']
+
+        # Add both versions of abbreviated names to the dict.
+        for short, full in ABBREVS.items():
+            needle, replace = None, None
+
+            if county.startswith(short):
+                needle, replace = short, full
+            elif county.startswith(full):
+                needle, replace = full, short
+
+            if needle is not None:
+                replaced = county.replace(needle, replace, 1)
+                bare_replaced = bare_county.replace(needle, replace, 1)
+                state[replaced] = state[bare_replaced] = row['countyfp']
+        return counties
+
     def _load_county_data(self, vintage):
         with self.data.joinpath(COUNTY_FILES[vintage]).open('rt', encoding='utf-8') as f:
             counties = {}
             for row in csv.DictReader(f):
-                if row['statefp'] not in counties:
-                    counties[row['statefp']] = {}
-
-                state = counties[row['statefp']]
-
-                # Strip diacretics, remove geography name and add both to dict
-                county = self._delete_diacretics(row['name'].lower())
-                bare_county = re.sub(COUNTY_PATTERN, '', county)
-                state[county] = state[bare_county] = row['countyfp']
-
-                # Add both versions of abbreviated names to the dict.
-                for short, full in ABBREVS.items():
-                    needle, replace = None, None
-
-                    if county.startswith(short):
-                        needle, replace = short, full
-                    elif county.startswith(full):
-                        needle, replace = full, short
-
-                    if needle is not None:
-                        replaced = county.replace(needle, replace, 1)
-                        bare_replaced = bare_county.replace(needle, replace, 1)
-                        state[replaced] = state[bare_replaced] = row['countyfp']
+                counties = self._normalize_county_data(row, counties)
         return counties
-
+    
+    def _load_county_data_from_external_source(self, data):
+        counties = {}
+        for row in data:
+            counties = self._normalize_county_data(row, counties)
+        
+        return counties
+    
     def _delete_diacretics(self, string):
         return re.sub(self.diacretic_pattern, self.delete_diacretics, string)
 
